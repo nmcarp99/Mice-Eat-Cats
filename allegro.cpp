@@ -29,6 +29,14 @@ int closeDisplay()
 	return 0;
 }
 
+int drawCredits()
+{
+	al_clear_to_color(al_map_rgb(0, 0, 0));
+	//draw here
+	al_flip_display();
+	return 0;
+}
+
 int redrawStartUp()
 {
 	//draw here
@@ -100,7 +108,51 @@ int options()
 
 int credits()
 {
-	cout<<"credits"<<endl;
+	al_install_mouse();
+
+	bool inCredits = true;
+
+	bool mouse_button_1 = false;
+
+	drawCredits();
+
+	while (inCredits) {
+		ALLEGRO_EVENT event;
+		ALLEGRO_TIMEOUT timeout;
+		ALLEGRO_MOUSE_STATE state;
+
+		// Intalize timeout
+		al_init_timeout(&timeout, 0.06);
+
+		//get mouse state
+		al_get_mouse_state(&state);
+
+		bool get_event = al_wait_for_event_until(event_queue, &event, &timeout);
+
+		if (mouse_button_1 == false) {
+			if (state.buttons & 1) {
+				mouse_button_1 = true;
+			}
+		}
+		else {
+			if (!(state.buttons & 1)) {
+				inCredits = false;
+				mouse_button_1 = false;
+			}
+		}
+
+		if (get_event) {
+			switch (event.type) {
+				case ALLEGRO_EVENT_DISPLAY_CLOSE:
+					inCredits = false;
+					endProcess = true;
+					break;
+			}
+		}
+	}
+
+	al_uninstall_mouse();
+
 	return 0;
 }
 
@@ -177,6 +229,7 @@ int menu()
 					case ALLEGRO_EVENT_DISPLAY_CLOSE:
 						inMenu = false;
 						endProcess = true;
+						selection = 'e';
 						break;
 					case ALLEGRO_EVENT_TIMER:
 						redrawMenu();
