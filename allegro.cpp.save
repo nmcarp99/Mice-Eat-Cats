@@ -38,6 +38,14 @@ int drawCredits()
 	return 0;
 }
 
+int drawOptions()
+{
+	al_draw_bitmap(creditsbck, 0, 0, 0);
+	//draw here
+	al_flip_display();
+	return 0;
+}
+
 int redrawStartUp()
 {
 	//draw here
