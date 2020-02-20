@@ -7,11 +7,8 @@ using namespace std;
 const float FPS = 60;
 ALLEGRO_BITMAP * bckground = NULL;
 ALLEGRO_BITMAP * mouse = NULL;
-ALLEGRO_BITMAP * playpic = NULL;
-ALLEGRO_BITMAP * optionspic = NULL;
-ALLEGRO_BITMAP * creditspic = NULL;
 ALLEGRO_BITMAP * creditsbck = NULL;
-ALLEGRO_BITMAP * exitpic = NULL;
+ALLEGRO_BITMAP * menubck = NULL;
 ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *timer = NULL;
@@ -65,6 +62,8 @@ int redrawGame()
 
 int play()
 {
+	al_rest(5);
+	return 0;
 	bool inGame = true;
 
 	while (inGame) {
