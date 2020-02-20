@@ -182,7 +182,12 @@ int options()
 		}
 		else {
 			if (!(state.buttons & 1)) {
-				inOptions = false;
+				if (state.x >= 90 && state.x <= 990 && state.y >= 256 && state.y <= 346) {
+					cout<<"sound change"<<endl;
+				}
+				else {
+					inOptions = false;
+				}
 				mouse_button_1 = false;
 			}
 		}
