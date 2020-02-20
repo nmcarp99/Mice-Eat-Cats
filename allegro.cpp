@@ -9,6 +9,8 @@ ALLEGRO_BITMAP * bckground = NULL;
 ALLEGRO_BITMAP * mouse = NULL;
 ALLEGRO_BITMAP * creditsbck = NULL;
 ALLEGRO_BITMAP * menubck = NULL;
+ALLEGRO_BITMAP * optionsybck = NULL;
+ALLEGRO_BITMAP * optionsxbck = NULL;
 ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *timer = NULL;
@@ -30,6 +32,14 @@ int closeDisplay()
 int drawCredits()
 {
 	al_draw_bitmap(creditsbck, 0, 0, 0);
+	//draw here
+	al_flip_display();
+	return 0;
+}
+
+int drawOptions()
+{
+	al_draw_bitmap(optionsybck, 0, 0, 0);
 	//draw here
 	al_flip_display();
 	return 0;
@@ -92,12 +102,6 @@ int play()
 	return 0;
 }
 
-int options()
-{
-	cout<<"options"<<endl;
-	return 0;
-}
-
 int credits()
 {
 	al_install_mouse();
@@ -137,6 +141,56 @@ int credits()
 			switch (event.type) {
 				case ALLEGRO_EVENT_DISPLAY_CLOSE:
 					inCredits = false;
+					endProcess = true;
+					break;
+			}
+		}
+	}
+
+	al_uninstall_mouse();
+
+	return 0;
+}
+
+int options()
+{
+	al_install_mouse();
+
+	bool inOptions = true;
+
+	bool mouse_button_1 = false;
+
+	drawOptions();
+
+	while (inOptions) {
+		ALLEGRO_EVENT event;
+		ALLEGRO_TIMEOUT timeout;
+		ALLEGRO_MOUSE_STATE state;
+
+		// Intalize timeout
+		al_init_timeout(&timeout, 0.06);
+
+		//get mouse state
+		al_get_mouse_state(&state);
+
+		bool get_event = al_wait_for_event_until(event_queue, &event, &timeout);
+
+		if (mouse_button_1 == false) {
+			if (state.buttons & 1) {
+				mouse_button_1 = true;
+			}
+		}
+		else {
+			if (!(state.buttons & 1)) {
+				inOptions = false;
+				mouse_button_1 = false;
+			}
+		}
+
+		if (get_event) {
+			switch (event.type) {
+				case ALLEGRO_EVENT_DISPLAY_CLOSE:
+					inOptions = false;
 					endProcess = true;
 					break;
 			}
@@ -256,6 +310,8 @@ int main(int argc, char *argv[])
 
 	// Load images
 	creditsbck = al_load_bitmap("creditsbck.png");
+	optionsybck = al_load_bitmap("optionsybck.png");
+	optionsxbck = al_load_bitmap("optionsxbck.png");
 	mouse = al_load_bitmap("mouse.png");
 	bckground = al_load_bitmap("bckground.jpeg");
 	menubck = al_load_bitmap("menubck.png");
