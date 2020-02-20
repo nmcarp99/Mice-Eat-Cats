@@ -49,16 +49,8 @@ int redrawStartUp()
 
 int redrawMenu()
 {
-	al_clear_to_color(al_map_rgb(171, 205, 239));
+	al_draw_bitmap(menubck, 0, 0, 0);
 	//draw here
-	al_draw_filled_rounded_rectangle(440, 125, 640, 200, 20, 30, al_map_rgb(0, 128, 0));
-	al_draw_bitmap(playpic, 465, 125, 0);
-	al_draw_filled_rounded_rectangle(440, 225, 640, 300, 20, 30, al_map_rgb(0, 128, 0));
-	al_draw_bitmap(optionspic, 465, 225, 0);
-	al_draw_filled_rounded_rectangle(440, 325, 640, 400, 20, 30, al_map_rgb(0, 128, 0));
-	al_draw_bitmap(creditspic, 465, 325, 0);
-	al_draw_filled_rounded_rectangle(440, 425, 640, 500, 20, 30, al_map_rgb(0, 128, 0));
-	al_draw_bitmap(exitpic, 465, 425, 0);
 	al_flip_display();
 	return 0;
 }
@@ -267,10 +259,7 @@ int main(int argc, char *argv[])
 	creditsbck = al_load_bitmap("creditsbck.png");
 	mouse = al_load_bitmap("mouse.png");
 	bckground = al_load_bitmap("bckground.jpeg");
-	playpic = al_load_bitmap("play.png");
-	optionspic = al_load_bitmap("options.png");
-	creditspic = al_load_bitmap("credits.png");
-	exitpic = al_load_bitmap("exit.png");
+	menubck = al_load_bitmap("menubck.png");
 
 	// Clear screen to black
 	al_clear_to_color(al_map_rgb(0, 0, 0));
