@@ -29,30 +29,40 @@ bool key_right = false;
 bool key_up = false;
 bool key_down = false;
 bool key_esc = false;
+bool optionsx = false;
 char selection = ' ';
 
 bool checkSound() {
-	fstream file("sound.txt", fstream::in);
+	fstream openfile("sound.txt", fstream::in);
 	string text;
-	file >> text;
-	file.close();
-	cout<<text<<endl;
+	openfile>>text;
+	openfile.close();
 	if (text == "0") {
-		return false;
+		optionsx = true;
+		return 0;
 	}
-	else {
-		return true;
+	else if (text == "1") {
+		optionsx = false;
+		return 0;
 	}
-	return true;
+	return 0;
 }
 
 int changeSound() {
+	fstream openfile("sound.txt", fstream::in);
+	string text;
+	openfile>>text;
+	openfile.close();
 	fstream file("sound.txt", fstream::out);
-	if (checkSound()) {
+	if (text == "1") {
 		file<<"0";
+		optionsx = true;
+		return 0;
 	}
-	else {
+	else if (text == "0") {
 		file<<"1";
+		optionsx = false;
+		return 0;
 	}
 	file.close();
 	return 0;
@@ -78,7 +88,12 @@ int drawCredits()
 
 int drawOptions()
 {
-	al_draw_bitmap(optionsybck, 0, 0, 0);
+	if (!optionsx) {
+		al_draw_bitmap(optionsybck, 0, 0, 0);
+	}
+	else {
+		al_draw_bitmap(optionsxbck, 0, 0, 0);
+	}
 	//draw here
 	al_flip_display();
 	return 0;
@@ -314,7 +329,6 @@ int options()
 
 	bool mouse_button_1 = false;
 
-	drawOptions();
 
 	while (inOptions) {
 		ALLEGRO_EVENT event;
@@ -337,7 +351,6 @@ int options()
 		else {
 			if (!(state.buttons & 1)) {
 				if (state.x >= 90 && state.x <= 990 && state.y >= 256 && state.y <= 346) {
-					cout<<"sound change"<<endl;
 					changeSound();
 				}
 				else {
@@ -353,6 +366,10 @@ int options()
 					inOptions = false;
 					endProcess = true;
 					break;
+				case ALLEGRO_EVENT_TIMER:
+					drawOptions();
+					break;
+
 			}
 		}
 	}
@@ -453,6 +470,8 @@ int menu()
 
 int main(int argc, char *argv[])
 {
+	checkSound();
+
 	bool startupDone = false;
 	bool paused = false;
 
