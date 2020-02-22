@@ -23,6 +23,7 @@ bool key_left = false;
 bool key_right = false;
 bool key_up = false;
 bool key_down = false;
+bool key_esc = false;
 char selection = ' ';
 
 int closeDisplay()
@@ -144,6 +145,22 @@ bool checkDown(ALLEGRO_KEYBOARD_STATE state)
 	}
 	return false;
 }
+bool checkEsc(ALLEGRO_KEYBOARD_STATE state)
+{
+	if (key_esc == false) {
+		if (al_key_down(&state, ALLEGRO_KEY_ESCAPE)) {
+			key_esc = true;
+			return false;
+		}
+	}
+	else {
+		if (!(al_key_down(&state, ALLEGRO_KEY_ESCAPE))) {
+			key_esc = false;
+			return true;
+		}
+	}
+	return false;
+}
 
 int play()
 {
@@ -165,6 +182,11 @@ int play()
 		al_init_timeout(&timeout, 0.06);
 
 		bool get_event = al_wait_for_event_until(event_queue, &event, &timeout);
+
+		if (checkEsc(state)) {
+			cout<<"esc"<<endl;
+			inGame = false;
+		}
 
 		if (checkLeft(state)) {
 			mouseX = mouseX - 10;
