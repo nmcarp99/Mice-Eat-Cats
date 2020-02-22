@@ -1,3 +1,5 @@
+#include <string>
+#include <fstream>
 #include <iostream>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
@@ -28,6 +30,33 @@ bool key_up = false;
 bool key_down = false;
 bool key_esc = false;
 char selection = ' ';
+
+bool checkSound() {
+	fstream file("sound.txt", fstream::in);
+	string text;
+	file >> text;
+	file.close();
+	cout<<text<<endl;
+	if (text == "0") {
+		return false;
+	}
+	else {
+		return true;
+	}
+	return true;
+}
+
+int changeSound() {
+	fstream file("sound.txt", fstream::out);
+	if (checkSound()) {
+		file<<"0";
+	}
+	else {
+		file<<"1";
+	}
+	file.close();
+	return 0;
+}
 
 int closeDisplay()
 {
@@ -177,7 +206,6 @@ int play()
 		}
 
 		if (checkEsc(state)) {
-			cout<<"esc"<<endl;
 			inGame = false;
 		}
 
@@ -187,7 +215,6 @@ int play()
 				mouseFrames = mouseFrames + 1;
 				frameUp = true;
 			}
-			cout<<"left"<<endl;
 		}
 		if (checkUp(state)) {
 			mouseY = mouseY - 10;
@@ -195,7 +222,6 @@ int play()
 				mouseFrames = mouseFrames + 1;
 				frameUp = true;
 			}
-			cout<<"up"<<endl;
 		}
 		if (checkDown(state)) {
 			mouseY = mouseY + 10;
@@ -203,7 +229,6 @@ int play()
 				mouseFrames = mouseFrames + 1;
 				frameUp = true;
 			}
-			cout<<"down"<<endl;
 		}
 		if (checkRight(state)) {
 			mouseX = mouseX + 10;
@@ -211,7 +236,6 @@ int play()
 				mouseFrames = mouseFrames + 1;
 				frameUp = true;
 			}
-			cout<<"right"<<endl;
 		}
 
 		if (get_event) {
@@ -314,6 +338,7 @@ int options()
 			if (!(state.buttons & 1)) {
 				if (state.x >= 90 && state.x <= 990 && state.y >= 256 && state.y <= 346) {
 					cout<<"sound change"<<endl;
+					changeSound();
 				}
 				else {
 					inOptions = false;
