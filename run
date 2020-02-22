@@ -1,0 +1,1 @@
+g++ allegro.cpp -lallegro -lallegro_image -lallegro_primitives -o allegro; ./allegro

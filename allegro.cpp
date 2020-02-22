@@ -11,12 +11,18 @@ ALLEGRO_BITMAP * creditsbck = NULL;
 ALLEGRO_BITMAP * menubck = NULL;
 ALLEGRO_BITMAP * optionsybck = NULL;
 ALLEGRO_BITMAP * optionsxbck = NULL;
+ALLEGRO_BITMAP * smallmouse = NULL;
 ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *timer = NULL;
 float mouseX = -550;
+float mouseY = 0;
 bool endProcess = false;
 bool mouse_button_1 = false;
+bool key_left = false;
+bool key_right = false;
+bool key_up = false;
+bool key_down = false;
 char selection = ' ';
 
 int closeDisplay()
@@ -66,25 +72,112 @@ int redrawGame()
 {
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	//draw here
+	al_draw_bitmap(smallmouse, mouseX, mouseY, 0);
 	al_flip_display();
 	return 0;
 }
 
+bool checkLeft(ALLEGRO_KEYBOARD_STATE state)
+{
+	if (key_left == false) {
+		if (al_key_down(&state, ALLEGRO_KEY_LEFT)) {
+			key_left = true;
+			return false;
+		}
+	}
+	else {
+		if (!(al_key_down(&state, ALLEGRO_KEY_LEFT))) {
+			key_left = false;
+			return true;
+		}
+	}
+}
+
+bool checkRight(ALLEGRO_KEYBOARD_STATE state)
+{
+	if (key_right == false) {
+		if (al_key_down(&state, ALLEGRO_KEY_RIGHT)) {
+			key_right = true;
+			return false;
+		}
+	}
+	else {
+		if (!(al_key_down(&state, ALLEGRO_KEY_RIGHT))) {
+			key_right = false;
+			return true;
+		}
+	}
+}
+
+bool checkUp(ALLEGRO_KEYBOARD_STATE state)
+{
+	if (key_up == false) {
+		if (al_key_down(&state, ALLEGRO_KEY_UP)) {
+			key_up = true;
+			return false;
+		}
+	}
+	else {
+		if (!(al_key_down(&state, ALLEGRO_KEY_UP))) {
+			key_up = false;
+			return true;
+		}
+	}
+}
+
+bool checkDown(ALLEGRO_KEYBOARD_STATE state)
+{
+	if (key_down == false) {
+		if (al_key_down(&state, ALLEGRO_KEY_DOWN)) {
+			key_down = true;
+			return false;
+		}
+	}
+	else {
+		if (!(al_key_down(&state, ALLEGRO_KEY_DOWN))) {
+			key_down = false;
+			return true;
+		}
+	}
+}
+
 int play()
 {
-	al_rest(5);
-	return 0;
+	al_install_keyboard();
+
+	mouseX = 0;
+	mouseY = 0;
+
 	bool inGame = true;
 
 	while (inGame) {
+		ALLEGRO_KEYBOARD_STATE state;
 		ALLEGRO_EVENT event;
 		ALLEGRO_TIMEOUT timeout;
-		ALLEGRO_MOUSE_STATE state;
+
+		al_get_keyboard_state(&state);
 
 		// Intalize timeout
 		al_init_timeout(&timeout, 0.06);
 
 		bool get_event = al_wait_for_event_until(event_queue, &event, &timeout);
+
+		if (checkLeft(state)) {
+			mouseX = mouseX - 10;
+			cout<<"left"<<endl;
+		}
+		if (checkUp(state)) {
+			mouseY = mouseY - 10;
+			cout<<"up"<<endl;
+		}
+		if (checkDown(state)) {
+			mouseY = mouseY + 10;
+			cout<<"down"<<endl;
+		}
+		if (checkRight(state)) {
+			mouseX = mouseX + 10;
+			cout<<"right"<<endl;
+		}
 
 		if (get_event) {
 			switch (event.type) {
@@ -98,6 +191,8 @@ int play()
 			}
 		}
 	}
+
+	al_uninstall_keyboard();
 
 	return 0;
 }
@@ -318,6 +413,7 @@ int main(int argc, char *argv[])
 	optionsybck = al_load_bitmap("optionsybck.png");
 	optionsxbck = al_load_bitmap("optionsxbck.png");
 	mouse = al_load_bitmap("mouse.png");
+	smallmouse = al_load_bitmap("smallmouse.png");
 	bckground = al_load_bitmap("bckground.jpeg");
 	menubck = al_load_bitmap("menubck.png");
 
