@@ -12,9 +12,12 @@ ALLEGRO_BITMAP * menubck = NULL;
 ALLEGRO_BITMAP * optionsybck = NULL;
 ALLEGRO_BITMAP * optionsxbck = NULL;
 ALLEGRO_BITMAP * smallmouse = NULL;
+ALLEGRO_BITMAP * smallmouse1 = NULL;
 ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *timer = NULL;
+int mouseFrames = 0;
+bool mouse1 = false;
 float mouseX = -550;
 float mouseY = 0;
 bool endProcess = false;
@@ -73,7 +76,12 @@ int redrawGame()
 {
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	//draw here
-	al_draw_bitmap(smallmouse, mouseX, mouseY, 0);
+	if (!mouse1) {
+		al_draw_bitmap(smallmouse, mouseX, mouseY, 0);
+	}
+	else {
+		al_draw_bitmap(smallmouse1, mouseX, mouseY, 0);
+	}
 	al_flip_display();
 	return 0;
 }
@@ -143,6 +151,8 @@ int play()
 {
 	al_install_keyboard();
 
+	mouseFrames = 0;
+	mouse1 = false;
 	mouseX = 0;
 	mouseY = 0;
 
@@ -153,12 +163,18 @@ int play()
 		ALLEGRO_EVENT event;
 		ALLEGRO_TIMEOUT timeout;
 
+		bool frameUp = false;
+
 		al_get_keyboard_state(&state);
 
 		// Intalize timeout
 		al_init_timeout(&timeout, 0.06);
 
 		bool get_event = al_wait_for_event_until(event_queue, &event, &timeout);
+
+		if (((mouseFrames + 2) % 10) == 0) {
+			mouse1 = !mouse1;
+		}
 
 		if (checkEsc(state)) {
 			cout<<"esc"<<endl;
@@ -167,18 +183,34 @@ int play()
 
 		if (checkLeft(state)) {
 			mouseX = mouseX - 10;
+			if (!frameUp) {
+				mouseFrames = mouseFrames + 1;
+				frameUp = true;
+			}
 			cout<<"left"<<endl;
 		}
 		if (checkUp(state)) {
 			mouseY = mouseY - 10;
+			if (!frameUp) {
+				mouseFrames = mouseFrames + 1;
+				frameUp = true;
+			}
 			cout<<"up"<<endl;
 		}
 		if (checkDown(state)) {
 			mouseY = mouseY + 10;
+			if (!frameUp) {
+				mouseFrames = mouseFrames + 1;
+				frameUp = true;
+			}
 			cout<<"down"<<endl;
 		}
 		if (checkRight(state)) {
 			mouseX = mouseX + 10;
+			if (!frameUp) {
+				mouseFrames = mouseFrames + 1;
+				frameUp = true;
+			}
 			cout<<"right"<<endl;
 		}
 
@@ -417,6 +449,7 @@ int main(int argc, char *argv[])
 	optionsxbck = al_load_bitmap("optionsxbck.png");
 	mouse = al_load_bitmap("mouse.png");
 	smallmouse = al_load_bitmap("smallmouse.png");
+	smallmouse1 = al_load_bitmap("smallmouse1.png");
 	bckground = al_load_bitmap("bckground.jpeg");
 	menubck = al_load_bitmap("menubck.png");
 
