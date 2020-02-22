@@ -91,6 +91,7 @@ bool checkLeft(ALLEGRO_KEYBOARD_STATE state)
 			return true;
 		}
 	}
+	return false;
 }
 
 bool checkRight(ALLEGRO_KEYBOARD_STATE state)
@@ -107,6 +108,7 @@ bool checkRight(ALLEGRO_KEYBOARD_STATE state)
 			return true;
 		}
 	}
+	return false;
 }
 
 bool checkUp(ALLEGRO_KEYBOARD_STATE state)
@@ -123,6 +125,7 @@ bool checkUp(ALLEGRO_KEYBOARD_STATE state)
 			return true;
 		}
 	}
+	return false;
 }
 
 bool checkDown(ALLEGRO_KEYBOARD_STATE state)
@@ -139,6 +142,7 @@ bool checkDown(ALLEGRO_KEYBOARD_STATE state)
 			return true;
 		}
 	}
+	return false;
 }
 
 int play()
