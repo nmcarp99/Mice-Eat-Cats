@@ -78,73 +78,50 @@ int redrawGame()
 	return 0;
 }
 
-bool checkLeft(ALLEGRO_KEYBOARD_STATE state)
+bool checkDown(ALLEGRO_KEYBOARD_STATE state)
 {
-	if (key_left == false) {
-		if (al_key_down(&state, ALLEGRO_KEY_LEFT)) {
-			key_left = true;
-			return false;
-		}
+	if (al_key_down(&state, ALLEGRO_KEY_DOWN)) {
+		return true;
 	}
 	else {
-		if (!(al_key_down(&state, ALLEGRO_KEY_LEFT))) {
-			key_left = false;
-			return true;
-		}
-	}
-	return false;
-}
-
-bool checkRight(ALLEGRO_KEYBOARD_STATE state)
-{
-	if (key_right == false) {
-		if (al_key_down(&state, ALLEGRO_KEY_RIGHT)) {
-			key_right = true;
-			return false;
-		}
-	}
-	else {
-		if (!(al_key_down(&state, ALLEGRO_KEY_RIGHT))) {
-			key_right = false;
-			return true;
-		}
+		return false;
 	}
 	return false;
 }
 
 bool checkUp(ALLEGRO_KEYBOARD_STATE state)
 {
-	if (key_up == false) {
-		if (al_key_down(&state, ALLEGRO_KEY_UP)) {
-			key_up = true;
-			return false;
-		}
+	if (al_key_down(&state, ALLEGRO_KEY_UP)) {
+		return true;
 	}
 	else {
-		if (!(al_key_down(&state, ALLEGRO_KEY_UP))) {
-			key_up = false;
-			return true;
-		}
+		return false;
 	}
 	return false;
 }
 
-bool checkDown(ALLEGRO_KEYBOARD_STATE state)
+bool checkRight(ALLEGRO_KEYBOARD_STATE state)
 {
-	if (key_down == false) {
-		if (al_key_down(&state, ALLEGRO_KEY_DOWN)) {
-			key_down = true;
-			return false;
-		}
+	if (al_key_down(&state, ALLEGRO_KEY_RIGHT)) {
+		return true;
 	}
 	else {
-		if (!(al_key_down(&state, ALLEGRO_KEY_DOWN))) {
-			key_down = false;
-			return true;
-		}
+		return false;
 	}
 	return false;
 }
+
+bool checkLeft(ALLEGRO_KEYBOARD_STATE state)
+{
+	if (al_key_down(&state, ALLEGRO_KEY_LEFT)) {
+		return true;
+	}
+	else {
+		return false;
+	}
+	return false;
+}
+
 bool checkEsc(ALLEGRO_KEYBOARD_STATE state)
 {
 	if (key_esc == false) {
