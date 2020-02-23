@@ -73,6 +73,12 @@ int closeDisplay()
 	al_destroy_display(display);
 	al_destroy_event_queue(event_queue);
 	al_destroy_bitmap(bckground);
+	al_destroy_bitmap(creditsbck);
+	al_destroy_bitmap(optionsybck);
+	al_destroy_bitmap(optionsxbck);
+	al_destroy_bitmap(smallmouse);
+	al_destroy_bitmap(smallmouse1);
+	al_destroy_bitmap(menubck);
 	al_destroy_bitmap(mouse);
 
 	return 0;
