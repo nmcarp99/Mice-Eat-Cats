@@ -20,6 +20,8 @@ ALLEGRO_BITMAP * smallmouse1 = NULL;
 ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_SAMPLE_INSTANCE *backgroundMusicInstance = NULL;
 ALLEGRO_SAMPLE *backgroundMusic = NULL;
+ALLEGRO_SAMPLE_INSTANCE *gameMusicInstance = NULL;
+ALLEGRO_SAMPLE *gameMusic = NULL;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *timer = NULL;
 int numSamples = 1;
@@ -37,9 +39,16 @@ bool key_esc = false;
 bool optionsx = false;
 char selection = ' ';
 
-int check_for_restart_music() {
+int check_for_restart_thememusic() {
 	if (!al_get_sample_instance_playing(backgroundMusicInstance) && !optionsx) {
 		al_play_sample_instance(backgroundMusicInstance);
+	}
+	return 0;
+}
+
+int check_for_restart_gamemusic() {
+	if (!al_get_sample_instance_playing(gameMusicInstance) && !optionsx) {
+		al_play_sample_instance(gameMusicInstance);
 	}
 	return 0;
 }
@@ -68,6 +77,7 @@ int changeSound() {
 	fstream file("sound.txt", fstream::out);
 	if (text == "1") {
 		file<<"0";
+		al_stop_sample_instance(backgroundMusicInstance);
 		optionsx = true;
 		return 0;
 	}
@@ -213,6 +223,8 @@ bool checkEsc(ALLEGRO_KEYBOARD_STATE state)
 
 int play()
 {
+	al_stop_sample_instance(backgroundMusicInstance);
+
 	al_install_keyboard();
 
 	mouseFrames = 0;
@@ -227,7 +239,7 @@ int play()
 		ALLEGRO_EVENT event;
 		ALLEGRO_TIMEOUT timeout;
 
-		check_for_restart_music();
+		check_for_restart_gamemusic();
 
 		bool frameUp = false;
 
@@ -290,6 +302,8 @@ int play()
 
 	al_uninstall_keyboard();
 
+	al_stop_sample_instance(gameMusicInstance);
+
 	return 0;
 }
 
@@ -308,7 +322,7 @@ int credits()
 		ALLEGRO_TIMEOUT timeout;
 		ALLEGRO_MOUSE_STATE state;
 
-		check_for_restart_music();
+		check_for_restart_thememusic();
 
 		// Intalize timeout
 		al_init_timeout(&timeout, 0.06);
@@ -359,7 +373,7 @@ int options()
 		ALLEGRO_TIMEOUT timeout;
 		ALLEGRO_MOUSE_STATE state;
 
-		check_for_restart_music();
+		check_for_restart_thememusic();
 
 		// Intalize timeout
 		al_init_timeout(&timeout, 0.06);
@@ -440,7 +454,7 @@ int menu()
 			ALLEGRO_TIMEOUT timeout;
 			ALLEGRO_MOUSE_STATE state;
 
-			check_for_restart_music();
+			check_for_restart_thememusic();
 
 			// Intalize timeout
 			al_init_timeout(&timeout, 0.06);
@@ -527,6 +541,10 @@ int main(int argc, char *argv[])
 	backgroundMusic = al_load_sample("backgroundmusic.wav");
 	backgroundMusicInstance = al_create_sample_instance(backgroundMusic);
 	al_attach_sample_instance_to_mixer(backgroundMusicInstance, al_get_default_mixer());
+
+	gameMusic = al_load_sample("gamemusic.wav");
+	gameMusicInstance = al_create_sample_instance(gameMusic);
+	al_attach_sample_instance_to_mixer(gameMusicInstance, al_get_default_mixer());
 
 	// Load images
 	creditsbck = al_load_bitmap("creditsbck.png");
