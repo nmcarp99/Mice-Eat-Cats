@@ -1,1 +1,1 @@
-nano allegro.cpp; g++ allegro.cpp -lallegro -lallegro_image -lallegro_primitives -o allegro; ./allegro
+nano allegro.cpp; g++ allegro.cpp -lallegro -lallegro_image -lallegro_primitives -lallegro_audio -lallegro_acodec -o allegro; ./allegro

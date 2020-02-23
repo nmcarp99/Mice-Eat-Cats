@@ -1,6 +1,8 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <allegro5/allegro_audio.h>
+#include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
@@ -16,8 +18,11 @@ ALLEGRO_BITMAP * optionsxbck = NULL;
 ALLEGRO_BITMAP * smallmouse = NULL;
 ALLEGRO_BITMAP * smallmouse1 = NULL;
 ALLEGRO_DISPLAY *display = NULL;
+ALLEGRO_SAMPLE_INSTANCE *backgroundMusicInstance = NULL;
+ALLEGRO_SAMPLE *backgroundMusic = NULL;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *timer = NULL;
+int numSamples = 1;
 int mouseFrames = 0;
 bool mouse1 = false;
 float mouseX = -550;
@@ -31,6 +36,13 @@ bool key_down = false;
 bool key_esc = false;
 bool optionsx = false;
 char selection = ' ';
+
+int check_for_restart_music() {
+	if (!al_get_sample_instance_playing(backgroundMusicInstance) && !optionsx) {
+		al_play_sample_instance(backgroundMusicInstance);
+	}
+	return 0;
+}
 
 bool checkSound() {
 	fstream openfile("sound.txt", fstream::in);
@@ -80,6 +92,8 @@ int closeDisplay()
 	al_destroy_bitmap(smallmouse1);
 	al_destroy_bitmap(menubck);
 	al_destroy_bitmap(mouse);
+	al_destroy_sample(backgroundMusic);
+	al_destroy_sample_instance(backgroundMusicInstance);
 
 	return 0;
 }
@@ -213,6 +227,8 @@ int play()
 		ALLEGRO_EVENT event;
 		ALLEGRO_TIMEOUT timeout;
 
+		check_for_restart_music();
+
 		bool frameUp = false;
 
 		al_get_keyboard_state(&state);
@@ -292,6 +308,8 @@ int credits()
 		ALLEGRO_TIMEOUT timeout;
 		ALLEGRO_MOUSE_STATE state;
 
+		check_for_restart_music();
+
 		// Intalize timeout
 		al_init_timeout(&timeout, 0.06);
 
@@ -340,6 +358,8 @@ int options()
 		ALLEGRO_EVENT event;
 		ALLEGRO_TIMEOUT timeout;
 		ALLEGRO_MOUSE_STATE state;
+
+		check_for_restart_music();
 
 		// Intalize timeout
 		al_init_timeout(&timeout, 0.06);
@@ -410,10 +430,17 @@ int menu()
 
 		bool inMenu = true;
 
+		if (!optionsx) {
+			al_play_sample_instance(backgroundMusicInstance);
+		}
+
+
 		while (inMenu) {
 			ALLEGRO_EVENT event;
 			ALLEGRO_TIMEOUT timeout;
 			ALLEGRO_MOUSE_STATE state;
+
+			check_for_restart_music();
 
 			// Intalize timeout
 			al_init_timeout(&timeout, 0.06);
@@ -483,6 +510,9 @@ int main(int argc, char *argv[])
 
 	// Initializations and setup
 	al_init();
+	al_install_audio();
+	al_init_acodec_addon();
+	al_reserve_samples(numSamples);
 	al_init_image_addon();
 	al_init_primitives_addon();
 	display = al_create_display(1080, 640);
@@ -492,6 +522,11 @@ int main(int argc, char *argv[])
 	al_register_event_source(event_queue, al_get_display_event_source(display));
 	al_register_event_source(event_queue, al_get_timer_event_source(timer));
 	al_start_timer(timer);
+
+	//load samples
+	backgroundMusic = al_load_sample("backgroundmusic.wav");
+	backgroundMusicInstance = al_create_sample_instance(backgroundMusic);
+	al_attach_sample_instance_to_mixer(backgroundMusicInstance, al_get_default_mixer());
 
 	// Load images
 	creditsbck = al_load_bitmap("creditsbck.png");
