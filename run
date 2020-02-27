@@ -1,1 +1,1 @@
-g++ allegro.cpp -lallegro -lallegro_image -lallegro_primitives -lallegro_audio -lallegro_acodec -o allegro; ./allegro
+g++ Mice-Eat-Cats.cpp -lallegro -lallegro_image -lallegro_primitives -lallegro_audio -lallegro_acodec -o Mice-Eat-Cats; ./Mice-Eat-Cats
