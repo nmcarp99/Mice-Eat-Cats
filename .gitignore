@@ -1,3 +1,4 @@
+sound.txt
 Debug
 allegro.log
 framework.h
@@ -10,4 +11,3 @@ Mice-Eat-Cats.vcxproj.user
 Resource.h
 small.ico
 targetver.h
-sound.txt
