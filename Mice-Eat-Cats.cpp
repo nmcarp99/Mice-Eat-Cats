@@ -148,7 +148,7 @@ int redrawMenu()
 
 int redrawGame()
 {
-	al_clear_to_color(al_map_rgb(255, 255, 255));
+	al_clear_to_color(al_map_rgb(0, 0, 0));
 	//draw here
 	if (!mouse1) {
 		al_draw_bitmap(smallmouse, mouseX, mouseY, 0);
