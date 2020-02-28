@@ -17,6 +17,8 @@ ALLEGRO_BITMAP * optionsybck = NULL;
 ALLEGRO_BITMAP * optionsxbck = NULL;
 ALLEGRO_BITMAP * smallmouse = NULL;
 ALLEGRO_BITMAP * smallmouse1 = NULL;
+ALLEGRO_BITMAP * backsmallmouse = NULL;
+ALLEGRO_BITMAP * backsmallmouse1 = NULL;
 ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_SAMPLE_INSTANCE *backgroundMusicInstance = NULL;
 ALLEGRO_SAMPLE *backgroundMusic = NULL;
@@ -38,6 +40,7 @@ bool key_down = false;
 bool key_esc = false;
 bool optionsx = false;
 char selection = ' ';
+char mouseDir = 'f';
 
 int check_for_restart_thememusic() {
 	if (!al_get_sample_instance_playing(backgroundMusicInstance) && !optionsx) {
@@ -150,11 +153,23 @@ int redrawGame()
 {
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	//draw here
-	if (!mouse1) {
-		al_draw_bitmap(smallmouse, mouseX, mouseY, 0);
-	}
-	else {
-		al_draw_bitmap(smallmouse1, mouseX, mouseY, 0);
+	switch (mouseDir) {
+		case 'f':
+			if (!mouse1) {
+				al_draw_bitmap(smallmouse, mouseX, mouseY, 0);
+			}
+			else {
+				al_draw_bitmap(smallmouse1, mouseX, mouseY, 0);
+			}
+			break;
+		case 'b':
+			if (!mouse1) {
+				al_draw_bitmap(backsmallmouse, mouseX, mouseY, 0);
+			}
+			else {
+				al_draw_bitmap(backsmallmouse1, mouseX, mouseY, 0);
+			}
+			break;
 	}
 	al_flip_display();
 	return 0;
@@ -185,6 +200,7 @@ bool checkUp(ALLEGRO_KEYBOARD_STATE state)
 bool checkRight(ALLEGRO_KEYBOARD_STATE state)
 {
 	if (al_key_down(&state, ALLEGRO_KEY_RIGHT)) {
+		mouseDir = 'f';
 		return true;
 	}
 	else {
@@ -196,6 +212,7 @@ bool checkRight(ALLEGRO_KEYBOARD_STATE state)
 bool checkLeft(ALLEGRO_KEYBOARD_STATE state)
 {
 	if (al_key_down(&state, ALLEGRO_KEY_LEFT)) {
+		mouseDir = 'b';
 		return true;
 	}
 	else {
@@ -223,6 +240,8 @@ bool checkEsc(ALLEGRO_KEYBOARD_STATE state)
 
 int play()
 {
+	mouseDir = 'f';
+
 	al_stop_sample_instance(backgroundMusicInstance);
 
 	al_install_keyboard();
@@ -250,8 +269,9 @@ int play()
 
 		bool get_event = al_wait_for_event_until(event_queue, &event, &timeout);
 
-		if (((mouseFrames + 2) % 10) == 0) {
+		if (((mouseFrames + 1) % 11) == 0) {
 			mouse1 = !mouse1;
+			mouseFrames = mouseFrames + 1;
 		}
 
 		if (checkEsc(state)) {
@@ -553,6 +573,8 @@ int main(int argc, char *argv[])
 	mouse = al_load_bitmap("mouse.png");
 	smallmouse = al_load_bitmap("smallmouse.png");
 	smallmouse1 = al_load_bitmap("smallmouse1.png");
+	backsmallmouse = al_load_bitmap("backsmallmouse.png");
+	backsmallmouse1 = al_load_bitmap("backsmallmouse1.png");
 	bckground = al_load_bitmap("bckground.jpeg");
 	menubck = al_load_bitmap("menubck.png");
 
