@@ -65,7 +65,7 @@ bool checkSound() {
 		optionsx = true;
 		return 0;
 	}
-	else if (text == "1") {
+	else {
 		optionsx = false;
 		return 0;
 	}
@@ -78,15 +78,15 @@ int changeSound() {
 	openfile>>text;
 	openfile.close();
 	fstream file("sound.txt", fstream::out);
-	if (text == "1") {
-		file<<"0";
-		al_stop_sample_instance(backgroundMusicInstance);
-		optionsx = true;
+	if (text == "0") {
+		file << "1";
+		optionsx = false;
 		return 0;
 	}
-	else if (text == "0") {
-		file<<"1";
-		optionsx = false;
+	else {
+		file << "0";
+		al_stop_sample_instance(backgroundMusicInstance);
+		optionsx = true;
 		return 0;
 	}
 	file.close();
