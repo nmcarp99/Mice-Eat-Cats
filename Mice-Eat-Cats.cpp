@@ -14,6 +14,7 @@ ALLEGRO_BITMAP * bckground = NULL;
 ALLEGRO_BITMAP * mouse = NULL;
 ALLEGRO_BITMAP * creditsbck = NULL;
 ALLEGRO_BITMAP * menubck = NULL;
+ALLEGRO_BITMAP * gamebck = NULL;
 ALLEGRO_BITMAP * optionsybck = NULL;
 ALLEGRO_BITMAP * optionsxbck = NULL;
 ALLEGRO_BITMAP * smallmouse = NULL;
@@ -32,6 +33,7 @@ int mouseFrames = 0;
 bool mouse1 = false;
 float mouseX = -550;
 float mouseY = 0;
+float backgroundX = 0;
 float footY = 640;
 bool waitingFoot = true;
 bool endProcess = false;
@@ -182,7 +184,13 @@ int redrawMenu()
 
 int redrawGame()
 {
-	al_clear_to_color(al_map_rgb(0, 0, 0));
+	if (backgroundX <= (0-1080)) {
+		backgroundX = 0;
+	}
+	al_draw_bitmap(gamebck, backgroundX, 0, 0);
+	if (backgroundX <= -1) {
+		al_draw_bitmap(gamebck, 1080 - (1080 * (backgroundX / (0-1080))), 0, 0);
+	}
 	//draw here
 	switch (mouseDir) {
 		case 'f':
@@ -288,7 +296,7 @@ int play()
 
 	mouseFrames = 0;
 	mouse1 = false;
-	mouseX = 0;
+	mouseX = 300;
 	mouseY = 0;
 
 	bool inGame = true;
@@ -319,7 +327,12 @@ int play()
 		}
 
 		if (checkLeft(state)) {
-			mouseX = mouseX - 10;
+			if (mouseX >= 280) {
+				mouseX = mouseX - 10;
+			}
+			else {
+				backgroundX = backgroundX + 10;
+			}
 			if (!frameUp) {
 				mouseFrames = mouseFrames + 1;
 				frameUp = true;
@@ -340,7 +353,12 @@ int play()
 			}
 		}
 		if (checkRight(state)) {
-			mouseX = mouseX + 10;
+			if (mouseX <= 500) {
+				mouseX = mouseX + 10;
+			}
+			else {
+				backgroundX = backgroundX - 10;
+			}
 			if (!frameUp) {
 				mouseFrames = mouseFrames + 1;
 				frameUp = true;
@@ -605,6 +623,7 @@ int main(int argc, char *argv[])
 	al_attach_sample_instance_to_mixer(gameMusicInstance, al_get_default_mixer());
 
 	// Load images
+	gamebck = al_load_bitmap("background.png");
 	foot = al_load_bitmap("foot.png");
 	creditsbck = al_load_bitmap("creditsbck.png");
 	optionsybck = al_load_bitmap("optionsybck.png");
