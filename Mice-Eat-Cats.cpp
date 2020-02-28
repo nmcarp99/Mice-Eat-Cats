@@ -9,6 +9,7 @@
 
 using namespace std;
 const float FPS = 60;
+ALLEGRO_BITMAP * foot = NULL;
 ALLEGRO_BITMAP * bckground = NULL;
 ALLEGRO_BITMAP * mouse = NULL;
 ALLEGRO_BITMAP * creditsbck = NULL;
@@ -31,6 +32,8 @@ int mouseFrames = 0;
 bool mouse1 = false;
 float mouseX = -550;
 float mouseY = 0;
+float footY = 640;
+bool waitingFoot = true;
 bool endProcess = false;
 bool mouse_button_1 = false;
 bool key_left = false;
@@ -145,6 +148,12 @@ int redrawMenu()
 {
 	al_draw_bitmap(menubck, 0, 0, 0);
 	//draw here
+	if (waitingFoot == false) {
+		al_draw_bitmap(foot, 0, footY, 0);
+		if (footY > 507) {
+			footY = footY - 1;
+		}
+	}
 	al_flip_display();
 	return 0;
 }
@@ -238,13 +247,22 @@ bool checkEsc(ALLEGRO_KEYBOARD_STATE state)
 	return false;
 }
 
+bool checkFood(ALLEGRO_KEYBOARD_STATE state)
+{
+	if (waitingFoot == true) {
+		if (al_key_down(&state, ALLEGRO_KEY_F) && al_key_down(&state, ALLEGRO_KEY_O) && al_key_down(&state, ALLEGRO_KEY_T)) {
+			waitingFoot = false;
+			return true;
+		}
+	}
+	return false;
+}
+
 int play()
 {
 	mouseDir = 'f';
 
 	al_stop_sample_instance(backgroundMusicInstance);
-
-	al_install_keyboard();
 
 	mouseFrames = 0;
 	mouse1 = false;
@@ -320,8 +338,6 @@ int play()
 		}
 	}
 
-	al_uninstall_keyboard();
-
 	al_stop_sample_instance(gameMusicInstance);
 
 	return 0;
@@ -329,8 +345,6 @@ int play()
 
 int credits()
 {
-	al_install_mouse();
-
 	bool inCredits = true;
 
 	bool mouse_button_1 = false;
@@ -374,15 +388,11 @@ int credits()
 		}
 	}
 
-	al_uninstall_mouse();
-
 	return 0;
 }
 
 int options()
 {
-	al_install_mouse();
-
 	bool inOptions = true;
 
 	bool mouse_button_1 = false;
@@ -434,8 +444,6 @@ int options()
 		}
 	}
 
-	al_uninstall_mouse();
-
 	return 0;
 }
 
@@ -457,8 +465,9 @@ int checkSelection()
 
 int menu()
 {
+	al_install_mouse();
+	al_install_keyboard();
 	while (!endProcess) {
-		al_install_mouse();
 
 		bool mouse_button_1 = false;
 
@@ -473,8 +482,13 @@ int menu()
 			ALLEGRO_EVENT event;
 			ALLEGRO_TIMEOUT timeout;
 			ALLEGRO_MOUSE_STATE state;
+			ALLEGRO_KEYBOARD_STATE keyState;
 
 			check_for_restart_thememusic();
+
+			al_get_keyboard_state(&keyState);
+
+			checkFood(keyState);
 
 			// Intalize timeout
 			al_init_timeout(&timeout, 0.06);
@@ -528,10 +542,9 @@ int menu()
 			}
 		}
 
-		al_uninstall_mouse();
-
 		checkSelection();
 	}
+	al_uninstall_mouse();
 	return 0;
 }
 
@@ -567,6 +580,7 @@ int main(int argc, char *argv[])
 	al_attach_sample_instance_to_mixer(gameMusicInstance, al_get_default_mixer());
 
 	// Load images
+	foot = al_load_bitmap("foot.png");
 	creditsbck = al_load_bitmap("creditsbck.png");
 	optionsybck = al_load_bitmap("optionsybck.png");
 	optionsxbck = al_load_bitmap("optionsxbck.png");
