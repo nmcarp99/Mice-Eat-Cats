@@ -45,21 +45,30 @@ bool optionsx = false;
 char selection = ' ';
 char mouseDir = 'f';
 
-int check_for_restart_thememusic() {
+int easterFoot()
+{
+	cout<<"easterfoot"<<endl;
+	return 0;
+}
+
+int check_for_restart_thememusic()
+{
 	if (!al_get_sample_instance_playing(backgroundMusicInstance) && !optionsx) {
 		al_play_sample_instance(backgroundMusicInstance);
 	}
 	return 0;
 }
 
-int check_for_restart_gamemusic() {
+int check_for_restart_gamemusic()
+{
 	if (!al_get_sample_instance_playing(gameMusicInstance) && !optionsx) {
 		al_play_sample_instance(gameMusicInstance);
 	}
 	return 0;
 }
 
-bool checkSound() {
+bool checkSound()
+{
 	fstream openfile("sound.txt", fstream::in);
 	string text;
 	openfile>>text;
@@ -75,7 +84,8 @@ bool checkSound() {
 	return 0;
 }
 
-int changeSound() {
+int changeSound()
+{
 	fstream openfile("sound.txt", fstream::in);
 	string text;
 	openfile>>text;
@@ -118,19 +128,31 @@ int drawCredits()
 {
 	al_draw_bitmap(creditsbck, 0, 0, 0);
 	//draw here
+	if (waitingFoot == false) {
+		al_draw_bitmap(foot, 0, footY, 0);
+		if (footY > 507) {
+			footY = footY - 1;
+		}
+	}
 	al_flip_display();
 	return 0;
 }
 
 int drawOptions()
 {
+	//draw here
 	if (!optionsx) {
 		al_draw_bitmap(optionsybck, 0, 0, 0);
 	}
 	else {
 		al_draw_bitmap(optionsxbck, 0, 0, 0);
 	}
-	//draw here
+	if (waitingFoot == false) {
+		al_draw_bitmap(foot, 0, footY, 0);
+		if (footY > 507) {
+			footY = footY - 1;
+		}
+	}
 	al_flip_display();
 	return 0;
 }
@@ -505,6 +527,9 @@ int menu()
 			}
 			else {
 				if (!(state.buttons & 1)) {
+					if (state.x >= 0 && state.x <= 100 && state.y >= 507 && state.y <= 640 && waitingFoot == false) {
+						easterFoot();
+					}
 					if (state.x >= 440 && state.x <= 640) {
 						if (state.y >= 125 && state.y <= 200) {
 							selection = 'p';
