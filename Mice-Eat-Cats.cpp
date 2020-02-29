@@ -30,6 +30,7 @@ ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *timer = NULL;
 int numSamples = 1;
 int mouseFrames = 0;
+int levelProgress = 0;
 bool mouse1 = false;
 float mouseX = -550;
 float mouseY = 0;
@@ -327,6 +328,7 @@ int play()
 
 	al_stop_sample_instance(backgroundMusicInstance);
 
+	levelProgress = 0;
 	backgroundX = 0;
 	mouseFrames = 0;
 	mouse1 = false;
@@ -361,6 +363,7 @@ int play()
 		}
 
 		if (checkLeft(state)) {
+			levelProgress = levelProgress - 10;
 			if (mouseX >= 280) {
 				mouseX = mouseX - 10;
 			}
@@ -379,6 +382,7 @@ int play()
 			mouseY = mouseY + 160;
 		}
 		if (checkRight(state)) {
+			levelProgress = levelProgress + 10;
 			if (mouseX <= 500) {
 				mouseX = mouseX + 10;
 			}
