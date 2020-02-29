@@ -213,6 +213,9 @@ int redrawGame()
 	}
 	if (numbackgroundPassed >= 3) {
 		al_draw_bitmap(finish, 1080 - (1080 * (backgroundX / (0 - 1080))), 0, 0);
+		if (backgroundX <= -720) {
+			cout << "you win!" << endl;
+		}
 	}
 
 	//draw here
