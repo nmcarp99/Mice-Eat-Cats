@@ -35,6 +35,7 @@ float mouseX = -550;
 float mouseY = 0;
 float backgroundX = 0;
 float footY = 640;
+bool changedRat = false;
 bool waitingFoot = true;
 bool endProcess = false;
 bool mouse_button_1 = false;
@@ -49,10 +50,20 @@ char mouseDir = 'f';
 
 int easterFoot()
 {
-	smallmouse = al_load_bitmap("rat.png");
-	smallmouse1 = al_load_bitmap("rat1.png");
-	backsmallmouse = al_load_bitmap("backrat.png");
-	backsmallmouse1 = al_load_bitmap("backrat1.png");
+	if (changedRat == false) {
+		smallmouse = al_load_bitmap("rat.png");
+		smallmouse1 = al_load_bitmap("rat1.png");
+		backsmallmouse = al_load_bitmap("backrat.png");
+		backsmallmouse1 = al_load_bitmap("backrat1.png");
+		changedRat = true;
+	}
+	else {
+		smallmouse = al_load_bitmap("smallmouse.png");
+		smallmouse1 = al_load_bitmap("smallmouse1.png");
+		backsmallmouse = al_load_bitmap("backsmallmouse.png");
+		backsmallmouse1 = al_load_bitmap("backsmallmouse1.png");
+		changedRat = false;
+	}
 	return 0;
 }
 
