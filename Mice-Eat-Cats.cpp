@@ -229,24 +229,34 @@ int redrawGame()
 
 bool checkDown(ALLEGRO_KEYBOARD_STATE state)
 {
-	return false;
-	if (al_key_down(&state, ALLEGRO_KEY_DOWN)) {
-		return true;
+	if (key_down == false) {
+		if (al_key_down(&state, ALLEGRO_KEY_DOWN)) {
+			key_down = true;
+			return false;
+		}
 	}
 	else {
-		return false;
+		if (!(al_key_down(&state, ALLEGRO_KEY_DOWN))) {
+			key_down = false;
+			return true;
+		}
 	}
 	return false;
 }
 
 bool checkUp(ALLEGRO_KEYBOARD_STATE state)
 {
-	return false;
-	if (al_key_down(&state, ALLEGRO_KEY_UP)) {
-		return true;
+	if (key_up == false) {
+		if (al_key_down(&state, ALLEGRO_KEY_UP)) {
+			key_up = true;
+			return false;
+		}
 	}
 	else {
-		return false;
+		if (!(al_key_down(&state, ALLEGRO_KEY_UP))) {
+			key_up = false;
+			return true;
+		}
 	}
 	return false;
 }
@@ -257,9 +267,6 @@ bool checkRight(ALLEGRO_KEYBOARD_STATE state)
 		mouseDir = 'f';
 		return true;
 	}
-	else {
-		return false;
-	}
 	return false;
 }
 
@@ -268,9 +275,6 @@ bool checkLeft(ALLEGRO_KEYBOARD_STATE state)
 	if (al_key_down(&state, ALLEGRO_KEY_LEFT)) {
 		mouseDir = 'b';
 		return true;
-	}
-	else {
-		return false;
 	}
 	return false;
 }
@@ -355,14 +359,14 @@ int play()
 			}
 		}
 		if (checkUp(state)) {
-			mouseY = mouseY - 10;
+			mouseY = mouseY - 160;
 			if (!frameUp) {
 				mouseFrames = mouseFrames + 1;
 				frameUp = true;
 			}
 		}
 		if (checkDown(state)) {
-			mouseY = mouseY + 10;
+			mouseY = mouseY + 160;
 			if (!frameUp) {
 				mouseFrames = mouseFrames + 1;
 				frameUp = true;
