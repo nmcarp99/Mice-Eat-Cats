@@ -360,17 +360,9 @@ int play()
 		}
 		if (checkUp(state)) {
 			mouseY = mouseY - 160;
-			if (!frameUp) {
-				mouseFrames = mouseFrames + 1;
-				frameUp = true;
-			}
 		}
 		if (checkDown(state)) {
 			mouseY = mouseY + 160;
-			if (!frameUp) {
-				mouseFrames = mouseFrames + 1;
-				frameUp = true;
-			}
 		}
 		if (checkRight(state)) {
 			if (mouseX <= 500) {
