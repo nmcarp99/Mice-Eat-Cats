@@ -38,6 +38,7 @@ float mouseX = -550;
 float mouseY = 0;
 float backgroundX = 0;
 float footY = 640;
+bool inGame = true;
 bool waitingFoot = true;
 bool endProcess = false;
 bool mouse_button_1 = false;
@@ -214,7 +215,7 @@ int redrawGame()
 	if (numbackgroundPassed >= 3) {
 		al_draw_bitmap(finish, 1080 - (1080 * (backgroundX / (0 - 1080))), 0, 0);
 		if (backgroundX <= -720) {
-			cout << "you win!" << endl;
+			inGame = false;
 		}
 	}
 
