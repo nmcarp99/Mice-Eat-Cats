@@ -335,7 +335,7 @@ int play()
 	mouseX = 300;
 	mouseY = 51;
 
-	bool inGame = true;
+	inGame = true;
 
 	while (inGame) {
 		ALLEGRO_KEYBOARD_STATE state;
