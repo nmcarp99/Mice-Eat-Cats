@@ -191,6 +191,10 @@ int redrawGame()
 	if (backgroundX <= -1) {
 		al_draw_bitmap(gamebck, 1080 - (1080 * (backgroundX / (0-1080))), 0, 0);
 	}
+	else if (backgroundX >= 1080) {
+		al_draw_bitmap(gamebck, 1080 + (1080 * (backgroundX / (1080))), 0, 0);
+	}
+
 	//draw here
 	switch (mouseDir) {
 		case 'f':
@@ -294,6 +298,7 @@ int play()
 
 	al_stop_sample_instance(backgroundMusicInstance);
 
+	backgroundX = 0;
 	mouseFrames = 0;
 	mouse1 = false;
 	mouseX = 300;
