@@ -21,6 +21,7 @@ ALLEGRO_BITMAP *smallmouse = NULL;
 ALLEGRO_BITMAP *smallmouse1 = NULL;
 ALLEGRO_BITMAP *backsmallmouse = NULL;
 ALLEGRO_BITMAP *backsmallmouse1 = NULL;
+ALLEGRO_BITMAP* finish = NULL;
 ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_SAMPLE_INSTANCE *backgroundMusicInstance = NULL;
 ALLEGRO_SAMPLE *backgroundMusic = NULL;
@@ -31,6 +32,7 @@ ALLEGRO_TIMER *timer = NULL;
 int numSamples = 1;
 int mouseFrames = 0;
 int levelProgress = 0;
+int numbackgroundPassed = 0;
 bool mouse1 = false;
 float mouseX = -550;
 float mouseY = 0;
@@ -192,11 +194,13 @@ int redrawGame()
 		case 'f':
 			if (backgroundX <= (0-1080)) {
 				backgroundX = 0;
+				numbackgroundPassed = numbackgroundPassed + 1;
 			}
 			break;
 		case 'b':
 			if (backgroundX >= 0) {
 				backgroundX = (0-1080);
+				numbackgroundPassed = numbackgroundPassed - 1;
 			}
 			break;
 	}
@@ -206,6 +210,9 @@ int redrawGame()
 	}
 	else if (backgroundX >= 1080) {
 		al_draw_bitmap(gamebck, 1080 - (1080 * (backgroundX / 1080)), 0, 0);
+	}
+	if (numbackgroundPassed >= 3) {
+		al_draw_bitmap(finish, 1080 - (1080 * (backgroundX / (0 - 1080))), 0, 0);
 	}
 
 	//draw here
@@ -642,6 +649,7 @@ int main(int argc, char *argv[])
 	al_attach_sample_instance_to_mixer(gameMusicInstance, al_get_default_mixer());
 
 	// Load images
+	finish = al_load_bitmap("finish.png");
 	gamebck = al_load_bitmap("background.png");
 	foot = al_load_bitmap("foot.png");
 	creditsbck = al_load_bitmap("creditsbck.png");
