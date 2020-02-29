@@ -9,18 +9,18 @@
 
 using namespace std;
 const float FPS = 60;
-ALLEGRO_BITMAP * foot = NULL;
-ALLEGRO_BITMAP * bckground = NULL;
-ALLEGRO_BITMAP * mouse = NULL;
-ALLEGRO_BITMAP * creditsbck = NULL;
-ALLEGRO_BITMAP * menubck = NULL;
-ALLEGRO_BITMAP * gamebck = NULL;
-ALLEGRO_BITMAP * optionsybck = NULL;
-ALLEGRO_BITMAP * optionsxbck = NULL;
-ALLEGRO_BITMAP * smallmouse = NULL;
-ALLEGRO_BITMAP * smallmouse1 = NULL;
-ALLEGRO_BITMAP * backsmallmouse = NULL;
-ALLEGRO_BITMAP * backsmallmouse1 = NULL;
+ALLEGRO_BITMAP *foot = NULL;
+ALLEGRO_BITMAP *bckground = NULL;
+ALLEGRO_BITMAP *mouse = NULL;
+ALLEGRO_BITMAP *creditsbck = NULL;
+ALLEGRO_BITMAP *menubck = NULL;
+ALLEGRO_BITMAP *gamebck = NULL;
+ALLEGRO_BITMAP *optionsybck = NULL;
+ALLEGRO_BITMAP *optionsxbck = NULL;
+ALLEGRO_BITMAP *smallmouse = NULL;
+ALLEGRO_BITMAP *smallmouse1 = NULL;
+ALLEGRO_BITMAP *backsmallmouse = NULL;
+ALLEGRO_BITMAP *backsmallmouse1 = NULL;
 ALLEGRO_DISPLAY *display = NULL;
 ALLEGRO_SAMPLE_INSTANCE *backgroundMusicInstance = NULL;
 ALLEGRO_SAMPLE *backgroundMusic = NULL;
@@ -184,15 +184,24 @@ int redrawMenu()
 
 int redrawGame()
 {
-	if (backgroundX <= (0-1080)) {
-		backgroundX = 0;
+	switch(mouseDir) {
+		case 'f':
+			if (backgroundX <= (0-1080)) {
+				backgroundX = 0;
+			}
+			break;
+		case 'b':
+			if (backgroundX >= 0) {
+				backgroundX = (0-1080);
+			}
+			break;
 	}
 	al_draw_bitmap(gamebck, backgroundX, 0, 0);
 	if (backgroundX <= -1) {
 		al_draw_bitmap(gamebck, 1080 - (1080 * (backgroundX / (0-1080))), 0, 0);
 	}
 	else if (backgroundX >= 1080) {
-		al_draw_bitmap(gamebck, 1080 + (1080 * (backgroundX / (1080))), 0, 0);
+		al_draw_bitmap(gamebck, 1080 - (1080 * (backgroundX / 1080)), 0, 0);
 	}
 
 	//draw here
@@ -220,6 +229,7 @@ int redrawGame()
 
 bool checkDown(ALLEGRO_KEYBOARD_STATE state)
 {
+	return false;
 	if (al_key_down(&state, ALLEGRO_KEY_DOWN)) {
 		return true;
 	}
@@ -231,6 +241,7 @@ bool checkDown(ALLEGRO_KEYBOARD_STATE state)
 
 bool checkUp(ALLEGRO_KEYBOARD_STATE state)
 {
+	return false;
 	if (al_key_down(&state, ALLEGRO_KEY_UP)) {
 		return true;
 	}
@@ -302,7 +313,7 @@ int play()
 	mouseFrames = 0;
 	mouse1 = false;
 	mouseX = 300;
-	mouseY = 0;
+	mouseY = 51;
 
 	bool inGame = true;
 
