@@ -49,7 +49,10 @@ char mouseDir = 'f';
 
 int easterFoot()
 {
-	cout<<"easterfoot"<<endl;
+	smallmouse = al_load_bitmap("rat.png");
+	smallmouse1 = al_load_bitmap("rat1.png");
+	backsmallmouse = al_load_bitmap("backrat.png");
+	backsmallmouse1 = al_load_bitmap("backrat1.png");
 	return 0;
 }
 
