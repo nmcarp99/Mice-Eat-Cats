@@ -9,12 +9,12 @@
 
 using namespace std;
 const float FPS = 60;
+ALLEGRO_BITMAP *levelBackground[1];
 ALLEGRO_BITMAP *foot = NULL;
 ALLEGRO_BITMAP *bckground = NULL;
 ALLEGRO_BITMAP *mouse = NULL;
 ALLEGRO_BITMAP *creditsbck = NULL;
 ALLEGRO_BITMAP *menubck = NULL;
-ALLEGRO_BITMAP *gamebck = NULL;
 ALLEGRO_BITMAP *optionsybck = NULL;
 ALLEGRO_BITMAP *optionsxbck = NULL;
 ALLEGRO_BITMAP *smallmouse = NULL;
@@ -29,6 +29,7 @@ ALLEGRO_SAMPLE_INSTANCE *gameMusicInstance = NULL;
 ALLEGRO_SAMPLE *gameMusic = NULL;
 ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 ALLEGRO_TIMER *timer = NULL;
+int level = 0;
 int numSamples = 1;
 int mouseFrames = 0;
 int levelProgress = 0;
@@ -205,12 +206,12 @@ int redrawGame()
 			}
 			break;
 	}
-	al_draw_bitmap(gamebck, backgroundX, 0, 0);
+	al_draw_bitmap(levelBackground[level], backgroundX, 0, 0);
 	if (backgroundX <= -1) {
-		al_draw_bitmap(gamebck, 1080 - (1080 * (backgroundX / (0-1080))), 0, 0);
+		al_draw_bitmap(levelBackground[level], 1080 - (1080 * (backgroundX / (0-1080))), 0, 0);
 	}
 	else if (backgroundX >= 1080) {
-		al_draw_bitmap(gamebck, 1080 - (1080 * (backgroundX / 1080)), 0, 0);
+		al_draw_bitmap(levelBackground[level], 1080 - (1080 * (backgroundX / 1080)), 0, 0);
 	}
 	if (numbackgroundPassed >= 3) {
 		al_draw_bitmap(finish, 1080 - (1080 * (backgroundX / (0 - 1080))), 0, 0);
@@ -655,7 +656,7 @@ int main(int argc, char *argv[])
 
 	// Load images
 	finish = al_load_bitmap("finish.png");
-	gamebck = al_load_bitmap("background.png");
+	levelBackground[0] = al_load_bitmap("background.png");
 	foot = al_load_bitmap("foot.png");
 	creditsbck = al_load_bitmap("creditsbck.png");
 	optionsybck = al_load_bitmap("optionsybck.png");
