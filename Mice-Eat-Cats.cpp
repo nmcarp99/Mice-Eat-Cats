@@ -1,4 +1,3 @@
-#include <string>
 #include <fstream>
 #include <iostream>
 #include <allegro5/allegro_audio.h>
@@ -80,10 +79,10 @@ int check_for_restart_gamemusic()
 bool checkSound()
 {
 	fstream openfile("sound.txt", fstream::in);
-	string text;
+	char text;
 	openfile>>text;
 	openfile.close();
-	if (text == "0") {
+	if (text == '0') {
 		optionsx = true;
 		return 0;
 	}
@@ -97,11 +96,11 @@ bool checkSound()
 int changeSound()
 {
 	fstream openfile("sound.txt", fstream::in);
-	string text;
+	char text;
 	openfile>>text;
 	openfile.close();
 	fstream file("sound.txt", fstream::out);
-	if (text == "0") {
+	if (text == '0') {
 		file << "1";
 		optionsx = false;
 		return 0;
