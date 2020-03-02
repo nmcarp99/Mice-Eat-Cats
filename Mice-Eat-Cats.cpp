@@ -4,7 +4,6 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_image.h>
-#include <allegro5/allegro_primitives.h>
 
 using namespace std;
 const float FPS = 60;
@@ -635,7 +634,6 @@ int main(int argc, char* argv[])
 	al_init_acodec_addon();
 	al_reserve_samples(numSamples);
 	al_init_image_addon();
-	al_init_primitives_addon();
 	display = al_create_display(1080, 640);
 	al_set_window_title(display, "I Topi Mangiano Gatti");
 	event_queue = al_create_event_queue();
