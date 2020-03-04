@@ -8,7 +8,7 @@
 
 using namespace std;
 const float FPS = 60;
-ALLEGRO_BITMAP* levelBackground[1];
+ALLEGRO_BITMAP* levelBackground[2];
 ALLEGRO_BITMAP* foot = NULL;
 ALLEGRO_BITMAP* bckground = NULL;
 ALLEGRO_BITMAP* mouse = NULL;
@@ -189,6 +189,11 @@ int redrawMenu()
 	return 0;
 }
 
+int levelEnd()
+{
+	return 0;
+}
+
 int redrawGame()
 {
 	switch (mouseDir) {
@@ -216,7 +221,8 @@ int redrawGame()
 		al_draw_bitmap(finish, 1080 - (1080 * (backgroundX / (0 - 1080))), 0, 0);
 		if (backgroundX <= -720) {
 			numbackgroundPassed = 0;
-			inGame = false;
+			levelEnd();
+			++level;
 		}
 	}
 
@@ -655,7 +661,8 @@ int main(int argc, char* argv[])
 
 	// Load images
 	finish = al_load_bitmap("finish.png");
-	levelBackground[0] = al_load_bitmap("background.png");
+	levelBackground[0] = al_load_bitmap("level1.png");
+	levelBackground[1] = al_load_bitmap("level2.png");;
 	foot = al_load_bitmap("foot.png");
 	creditsbck = al_load_bitmap("creditsbck.png");
 	optionsybck = al_load_bitmap("optionsybck.png");
