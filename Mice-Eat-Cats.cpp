@@ -684,8 +684,9 @@ int main(int argc, char* argv[])
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
 
-	// Start update thread
-	thread thread_obj(update);
+	// Start update thread and allow it to continue independantly
+	thread update_thread(update);
+	update_thread.detach();
 
 	// Game Loop
 	while (!startupDone) {
