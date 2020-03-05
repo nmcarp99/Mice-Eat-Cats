@@ -51,12 +51,6 @@ bool optionsx = false;
 char selection = ' ';
 char mouseDir = 'f';
 
-int update()
-{
-	//check for updates, install them
-	return 0;
-}
-
 int easterFoot()
 {
 	smallmouse = al_load_bitmap("rat.png");
@@ -683,10 +677,6 @@ int main(int argc, char* argv[])
 	// Clear screen to black
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
-
-	// Start update thread and allow it to continue independantly
-	thread update_thread(update);
-	update_thread.detach();
 
 	// Game Loop
 	while (!startupDone) {
