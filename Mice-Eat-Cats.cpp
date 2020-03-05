@@ -1,3 +1,4 @@
+#include <thread>
 #include <fstream>
 #include <iostream>
 #include <allegro5/allegro.h>
@@ -49,6 +50,12 @@ bool key_esc = false;
 bool optionsx = false;
 char selection = ' ';
 char mouseDir = 'f';
+
+int update()
+{
+	//check for updates, install them
+	return 0;
+}
 
 int easterFoot()
 {
@@ -676,6 +683,9 @@ int main(int argc, char* argv[])
 	// Clear screen to black
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
+
+	// Start update thread
+	thread thread_obj(update);
 
 	// Game Loop
 	while (!startupDone) {
