@@ -1,4 +1,3 @@
-#include <thread>
 #include <fstream>
 #include <iostream>
 #include <allegro5/allegro.h>
