@@ -193,6 +193,14 @@ int drawOptions()
 	return 0;
 }
 
+int drawLevelEnd()
+{
+	al_draw_bitmap(optionsybck, 0, 0, 0);
+	//draw here
+	al_flip_display();
+	return 0;
+}
+
 int redrawStartUp()
 {
 	//draw here
@@ -218,7 +226,57 @@ int redrawMenu()
 
 int levelEnd()
 {
+	bool inLevelEnd = true;
+
+	bool mouse_button_1 = false;
+
+
+	while (inLevelEnd) {
+		ALLEGRO_EVENT event;
+		ALLEGRO_TIMEOUT timeout;
+		ALLEGRO_MOUSE_STATE state;
+
+		// Intalize timeout
+		al_init_timeout(&timeout, 0.06);
+
+		//get mouse state
+		al_get_mouse_state(&state);
+
+		bool get_event = al_wait_for_event_until(event_queue, &event, &timeout);
+
+		if (mouse_button_1 == false) {
+			if (state.buttons & 1) {
+				mouse_button_1 = true;
+			}
+		}
+		else {
+			if (!(state.buttons & 1)) {
+				if (state.x >= 90 && state.x <= 990 && state.y >= 256 && state.y <= 346) {
+					changeSound();
+				}
+				else {
+					inLevelEnd = false;
+				}
+				mouse_button_1 = false;
+			}
+		}
+
+		if (get_event) {
+			switch (event.type) {
+			case ALLEGRO_EVENT_DISPLAY_CLOSE:
+				inLevelEnd = false;
+				endProcess = true;
+				break;
+			case ALLEGRO_EVENT_TIMER:
+				drawLevelEnd();
+				break;
+
+			}
+		}
+	}
+
 	changeLevel();
+
 	return 0;
 }
 
