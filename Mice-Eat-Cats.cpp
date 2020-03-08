@@ -8,6 +8,7 @@
 using namespace std;
 const float FPS = 60;
 ALLEGRO_BITMAP* levelBackground[2];
+ALLEGRO_BITMAP* upMouse = NULL;
 ALLEGRO_BITMAP* foot = NULL;
 ALLEGRO_BITMAP* bckground = NULL;
 ALLEGRO_BITMAP* mouse = NULL;
@@ -35,6 +36,7 @@ int numbackgroundPassed = 0;
 bool mouse1 = false;
 float mouseX = -550;
 float mouseY = 0;
+float targetMouseY = 0;
 float backgroundX = 0;
 float footY = 640;
 bool inGame = true;
@@ -216,18 +218,18 @@ int levelEnd()
 int redrawGame()
 {
 	switch (mouseDir) {
-	case 'f':
-		if (backgroundX <= (0 - 1080)) {
-			backgroundX = 0;
-			numbackgroundPassed = numbackgroundPassed + 1;
-		}
-		break;
-	case 'b':
-		if (backgroundX >= 0) {
-			backgroundX = (0 - 1080);
-			numbackgroundPassed = numbackgroundPassed - 1;
-		}
-		break;
+		case 'f':
+			if (backgroundX <= (0 - 1080)) {
+				backgroundX = 0;
+				numbackgroundPassed = numbackgroundPassed + 1;
+			}
+			break;
+		case 'b':
+			if (backgroundX >= 0) {
+				backgroundX = (0 - 1080);
+				numbackgroundPassed = numbackgroundPassed - 1;
+			}
+			break;
 	}
 	al_draw_bitmap(levelBackground[level], backgroundX, 0, 0);
 	if (backgroundX <= -1) {
@@ -246,23 +248,28 @@ int redrawGame()
 	}
 
 	//draw here
-	switch (mouseDir) {
-	case 'f':
-		if (!mouse1) {
-			al_draw_bitmap(smallmouse, mouseX, mouseY, 0);
+	if (targetMouseY != mouseY) {
+		al_draw_bitmap(upMouse, mouseX, mouseY, 0);
+	}
+	else {
+		switch (mouseDir) {
+			case 'f':
+				if (!mouse1) {
+					al_draw_bitmap(smallmouse, mouseX, mouseY, 0);
+				}
+				else {
+					al_draw_bitmap(smallmouse1, mouseX, mouseY, 0);
+				}
+				break;
+			case 'b':
+				if (!mouse1) {
+					al_draw_bitmap(backsmallmouse, mouseX, mouseY, 0);
+				}
+				else {
+					al_draw_bitmap(backsmallmouse1, mouseX, mouseY, 0);
+				}
+				break;
 		}
-		else {
-			al_draw_bitmap(smallmouse1, mouseX, mouseY, 0);
-		}
-		break;
-	case 'b':
-		if (!mouse1) {
-			al_draw_bitmap(backsmallmouse, mouseX, mouseY, 0);
-		}
-		else {
-			al_draw_bitmap(backsmallmouse1, mouseX, mouseY, 0);
-		}
-		break;
 	}
 	al_flip_display();
 	return 0;
@@ -359,6 +366,7 @@ int play()
 	mouseFrames = 0;
 	mouse1 = false;
 	mouseX = 300;
+	targetMouseY = 51;
 	mouseY = 51;
 
 	inGame = true;
@@ -378,6 +386,14 @@ int play()
 		al_init_timeout(&timeout, 0.06);
 
 		bool get_event = al_wait_for_event_until(event_queue, &event, &timeout);
+
+		if (targetMouseY > mouseY) {
+			mouseY = mouseY + 10;
+		}
+
+		else if (targetMouseY < mouseY) {
+			mouseY = mouseY - 10;
+		}
 
 		if (((mouseFrames + 1) % 11) == 0) {
 			mouse1 = !mouse1;
@@ -402,10 +418,10 @@ int play()
 			}
 		}
 		if (checkUp(state)) {
-			mouseY = mouseY - 160;
+			targetMouseY = targetMouseY - 160;
 		}
 		if (checkDown(state)) {
-			mouseY = mouseY + 160;
+			targetMouseY = targetMouseY + 160;
 		}
 		if (checkRight(state)) {
 			levelProgress = levelProgress + 10;
@@ -692,6 +708,7 @@ int main(int argc, char* argv[])
 	smallmouse1 = al_load_bitmap("smallmouse1.png");
 	backsmallmouse = al_load_bitmap("backsmallmouse.png");
 	backsmallmouse1 = al_load_bitmap("backsmallmouse1.png");
+	upMouse = al_load_bitmap("upmouse.png");
 	bckground = al_load_bitmap("bckground.jpeg");
 	menubck = al_load_bitmap("menubck.png");
 
