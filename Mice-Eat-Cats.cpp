@@ -75,6 +75,25 @@ int check_for_restart_gamemusic()
 	return 0;
 }
 
+bool checkLevel()
+{
+	fstream openfile("level.txt", fstream::in);
+	int text;
+	openfile>>text;
+	openfile.close();
+	level = text;
+	return 0;
+}
+
+int changeLevel()
+{
+	fstream file("level.txt", fstream::out);
+	file<<level;
+	file.close();
+
+	return 0;
+}
+
 bool checkSound()
 {
 	fstream openfile("sound.txt", fstream::in);
@@ -190,6 +209,7 @@ int redrawMenu()
 
 int levelEnd()
 {
+	changeLevel();
 	return 0;
 }
 
@@ -220,8 +240,8 @@ int redrawGame()
 		al_draw_bitmap(finish, 1080 - (1080 * (backgroundX / (0 - 1080))), 0, 0);
 		if (backgroundX <= -720) {
 			numbackgroundPassed = 0;
-			levelEnd();
 			++level;
+			levelEnd();
 		}
 	}
 
@@ -633,6 +653,8 @@ int main(int argc, char* argv[])
 
 	bool startupDone = false;
 	bool paused = false;
+
+	checkLevel();
 
 	// Initializations and setup
 	al_init();
