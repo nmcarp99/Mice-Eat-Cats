@@ -8,7 +8,7 @@
 using namespace std;
 const float FPS = 60;
 ALLEGRO_BITMAP* levelBackground[2];
-ALLEGRO_BITMAP* upMouse = NULL;
+ALLEGRO_BITMAP* upmouse = NULL;
 ALLEGRO_BITMAP* foot = NULL;
 ALLEGRO_BITMAP* bckground = NULL;
 ALLEGRO_BITMAP* mouse = NULL;
@@ -139,14 +139,21 @@ int closeDisplay()
 {
 	al_destroy_display(display);
 	al_destroy_event_queue(event_queue);
-	al_destroy_bitmap(bckground);
+	al_destroy_bitmap(finish);
+	al_destroy_bitmap(levelBackground[0]);
+	al_destroy_bitmap(levelBackground[1]);
+	al_destroy_bitmap(foot);
 	al_destroy_bitmap(creditsbck);
 	al_destroy_bitmap(optionsybck);
 	al_destroy_bitmap(optionsxbck);
+	al_destroy_bitmap(mouse);
 	al_destroy_bitmap(smallmouse);
 	al_destroy_bitmap(smallmouse1);
+	al_destroy_bitmap(backsmallmouse);
+	al_destroy_bitmap(backsmallmouse1);
+	al_destroy_bitmap(upmouse);
+	al_destroy_bitmap(bckground);
 	al_destroy_bitmap(menubck);
-	al_destroy_bitmap(mouse);
 	al_destroy_sample(backgroundMusic);
 	al_destroy_sample_instance(backgroundMusicInstance);
 
@@ -249,7 +256,7 @@ int redrawGame()
 
 	//draw here
 	if (targetMouseY != mouseY) {
-		al_draw_bitmap(upMouse, mouseX, mouseY, 0);
+		al_draw_bitmap(upmouse, mouseX, mouseY, 0);
 	}
 	else {
 		switch (mouseDir) {
@@ -708,7 +715,7 @@ int main(int argc, char* argv[])
 	smallmouse1 = al_load_bitmap("smallmouse1.png");
 	backsmallmouse = al_load_bitmap("backsmallmouse.png");
 	backsmallmouse1 = al_load_bitmap("backsmallmouse1.png");
-	upMouse = al_load_bitmap("upmouse.png");
+	upmouse = al_load_bitmap("upmouse.png");
 	bckground = al_load_bitmap("bckground.jpeg");
 	menubck = al_load_bitmap("menubck.png");
 
