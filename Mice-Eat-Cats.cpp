@@ -230,6 +230,13 @@ int levelEnd()
 
 	bool mouse_button_1 = false;
 
+	levelProgress = 0;
+	backgroundX = 0;
+	mouseFrames = 0;
+	mouse1 = false;
+	mouseX = 300;
+	targetMouseY = 51;
+	mouseY = 51;
 
 	while (inLevelEnd) {
 		ALLEGRO_EVENT event;
