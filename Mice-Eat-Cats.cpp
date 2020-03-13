@@ -1,12 +1,14 @@
 #include <fstream>
 #include <iostream>
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 #include <allegro5/allegro_image.h>
 
 using namespace std;
 const float FPS = 60;
+ALLEGRO_BITMAP* houndproductions = NULL;
 ALLEGRO_BITMAP* levelBackground[2];
 ALLEGRO_BITMAP* upmouse = NULL;
 ALLEGRO_BITMAP* foot = NULL;
@@ -28,6 +30,8 @@ ALLEGRO_SAMPLE_INSTANCE* gameMusicInstance = NULL;
 ALLEGRO_SAMPLE* gameMusic = NULL;
 ALLEGRO_EVENT_QUEUE* event_queue = NULL;
 ALLEGRO_TIMER* timer = NULL;
+float houndProductionsTransparency = 0.0f;
+int houndProductionsFrames = 0;
 int level = 0;
 int numSamples = 1;
 int mouseFrames = 0;
@@ -51,6 +55,18 @@ bool key_esc = false;
 bool optionsx = false;
 char selection = ' ';
 char mouseDir = 'f';
+
+int redrawHoundProductions()
+{
+	al_draw_bitmap(houndproductions, 0, 0, 0);
+	al_draw_filled_rectangle(0, 0, 1080, 640, al_map_rgba_f(0, 0, 0, houndProductionsTransparency));
+	//draw here
+	al_flip_display();
+	if (houndProductionsFrames >= 234) {
+		houndProductionsTransparency += 0.025641;
+	}
+	return 0;
+}
 
 int easterFoot()
 {
@@ -140,6 +156,7 @@ int closeDisplay()
 	al_destroy_display(display);
 	al_destroy_event_queue(event_queue);
 	al_destroy_bitmap(finish);
+	al_destroy_bitmap(houndproductions);
 	al_destroy_bitmap(levelBackground[0]);
 	al_destroy_bitmap(levelBackground[1]);
 	al_destroy_bitmap(foot);
@@ -740,7 +757,6 @@ int main(int argc, char* argv[])
 	checkSound();
 
 	bool startupDone = false;
-	bool paused = false;
 
 	checkLevel();
 
@@ -748,6 +764,7 @@ int main(int argc, char* argv[])
 	al_init();
 	al_install_audio();
 	al_init_acodec_addon();
+	al_init_primitives_addon();
 	al_reserve_samples(numSamples);
 	al_init_image_addon();
 	display = al_create_display(1080, 640);
@@ -783,12 +800,35 @@ int main(int argc, char* argv[])
 	upmouse = al_load_bitmap("upmouse.png");
 	bckground = al_load_bitmap("bckground.jpeg");
 	menubck = al_load_bitmap("menubck.png");
+	houndproductions = al_load_bitmap("houndproductions.png");
 
 	// Clear screen to black
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
 
-	// Game Loop
+	// Hound Productions
+	for (houndProductionsFrames = 0; houndProductionsFrames < 312; ++houndProductionsFrames) {
+		ALLEGRO_EVENT event;
+		ALLEGRO_TIMEOUT timeout;
+
+		// Intalize timeout
+		al_init_timeout(&timeout, 0.06);
+
+		bool get_event = al_wait_for_event_until(event_queue, &event, &timeout);
+
+		if (get_event) {
+			switch (event.type) {
+			case ALLEGRO_EVENT_DISPLAY_CLOSE:
+				return 0;
+				break;
+			case ALLEGRO_EVENT_TIMER:
+				redrawHoundProductions();
+				break;
+			}
+		}
+	}
+
+	// Loading Screen
 	while (!startupDone) {
 		ALLEGRO_EVENT event;
 		ALLEGRO_TIMEOUT timeout;
