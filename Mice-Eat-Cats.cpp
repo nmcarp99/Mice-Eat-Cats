@@ -84,6 +84,7 @@ int fade(ALLEGRO_BITMAP* image, int framesUpTo312, bool trueForOutFalseForIn, in
 			switch (event.type) {
 			case ALLEGRO_EVENT_DISPLAY_CLOSE:
 				endProcess = true;
+				return 0;
 				break;
 			case ALLEGRO_EVENT_TIMER:
 				redrawFade(image, fadeTransparency);
@@ -843,8 +844,12 @@ int main(int argc, char* argv[])
 	al_flip_display();
 
 	// Hound Productions
-	fade(houndproductions, 234, false, 312);
-	fade(houndproductions, 234, true, 312);
+	fade(houndproductions, 78, false, 156);
+	if (!endProcess) fade(houndproductions, 234, true, 312);
+
+	if (endProcess == true) {
+		return 0;
+	}
 
 	// Loading Screen
 	fade(bckground, 78, false, 156);
