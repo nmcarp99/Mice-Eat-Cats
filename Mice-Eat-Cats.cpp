@@ -68,10 +68,7 @@ int fade(ALLEGRO_BITMAP* image, int framesUpTo312, bool trueForOutFalseForIn)
 {
 	int frames = 0;
 	float fadeTransparency = 0.0f;
-	if (trueForOutFalseForIn == true) {
-		float fadeTransparency = 0.0f;
-	}
-	else {
+	if (trueForOutFalseForIn == false) {
 		float fadeTransparency = 1.0f;
 	}
 	for (frames = 0; frames < 312; ++frames) {
@@ -91,7 +88,13 @@ int fade(ALLEGRO_BITMAP* image, int framesUpTo312, bool trueForOutFalseForIn)
 			case ALLEGRO_EVENT_TIMER:
 				redrawFade(image, fadeTransparency);
 				if (frames >= framesUpTo312) {
-					fadeTransparency += 0.025641;
+					if (trueForOutFalseForIn == true) {
+						fadeTransparency += 0.025641;
+					}
+					else {
+						fadeTransparency -= 0.025641;
+						cout << "minus " << fadeTransparency << endl;
+					}
 				}
 				break;
 			}
@@ -701,6 +704,7 @@ int menu()
 {
 	al_install_mouse();
 	al_install_keyboard();
+	fade(menubck, 312, false);
 	while (!endProcess) {
 
 		bool mouse_button_1 = false;
