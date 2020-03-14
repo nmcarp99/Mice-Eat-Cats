@@ -64,14 +64,14 @@ int redrawFade(ALLEGRO_BITMAP* image, float fadeTransparency)
 	return 0;
 }
 
-int fade(ALLEGRO_BITMAP* image, int framesUpTo312, bool trueForOutFalseForIn)
+int fade(ALLEGRO_BITMAP* image, int framesUpTo312, bool trueForOutFalseForIn, int totalLength)
 {
 	int frames = 0;
 	float fadeTransparency = 0.0f;
 	if (trueForOutFalseForIn == false) {
-		float fadeTransparency = 1.0f;
+		fadeTransparency = 1.0f;
 	}
-	for (frames = 0; frames < 312; ++frames) {
+	for (frames = 0; frames < totalLength; ++frames) {
 		ALLEGRO_EVENT event;
 		ALLEGRO_TIMEOUT timeout;
 
@@ -93,7 +93,6 @@ int fade(ALLEGRO_BITMAP* image, int framesUpTo312, bool trueForOutFalseForIn)
 					}
 					else {
 						fadeTransparency -= 0.025641;
-						cout << "minus " << fadeTransparency << endl;
 					}
 				}
 				break;
@@ -704,7 +703,7 @@ int menu()
 {
 	al_install_mouse();
 	al_install_keyboard();
-	fade(menubck, 312, false);
+	fade(menubck, 39, false, 117);
 	while (!endProcess) {
 
 		bool mouse_button_1 = false;
@@ -844,7 +843,8 @@ int main(int argc, char* argv[])
 	al_flip_display();
 
 	// Hound Productions
-	fade(houndproductions, 234, true);
+	fade(houndproductions, 234, false, 312);
+	fade(houndproductions, 234, true, 312);
 
 	// Loading Screen
 	while (!startupDone) {
@@ -868,7 +868,7 @@ int main(int argc, char* argv[])
 		}
 		if (mouseX >= 1080) {
 			startupDone = true;
-			fade(bckground, 78, true);
+			fade(bckground, 39, true, 117);
 		}
 	}
 
