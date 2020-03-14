@@ -847,6 +847,7 @@ int main(int argc, char* argv[])
 	fade(houndproductions, 234, true, 312);
 
 	// Loading Screen
+	fade(bckground, 78, false, 156);
 	while (!startupDone) {
 		ALLEGRO_EVENT event;
 		ALLEGRO_TIMEOUT timeout;
