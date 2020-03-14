@@ -30,7 +30,6 @@ ALLEGRO_SAMPLE_INSTANCE* gameMusicInstance = NULL;
 ALLEGRO_SAMPLE* gameMusic = NULL;
 ALLEGRO_EVENT_QUEUE* event_queue = NULL;
 ALLEGRO_TIMER* timer = NULL;
-float houndProductionsTransparency = 0.0f;
 int houndProductionsFrames = 0;
 int level = 0;
 int numSamples = 1;
@@ -56,15 +55,49 @@ bool optionsx = false;
 char selection = ' ';
 char mouseDir = 'f';
 
-int redrawHoundProductions()
+int redrawFade(ALLEGRO_BITMAP* image, float fadeTransparency)
 {
-	al_draw_bitmap(houndproductions, 0, 0, 0);
-	al_draw_filled_rectangle(0, 0, 1080, 640, al_map_rgba_f(0, 0, 0, houndProductionsTransparency));
+	al_draw_bitmap(image, 0, 0, 0);
+	al_draw_filled_rectangle(0, 0, 1080, 640, al_map_rgba_f(0, 0, 0, fadeTransparency));
 	//draw here
 	al_flip_display();
-	if (houndProductionsFrames >= 234) {
-		houndProductionsTransparency += 0.025641;
+	return 0;
+}
+
+int fade(ALLEGRO_BITMAP* image, int framesUpTo312, bool trueForOutFalseForIn)
+{
+	int frames = 0;
+	float fadeTransparency = 0.0f;
+	if (trueForOutFalseForIn == true) {
+		float fadeTransparency = 0.0f;
 	}
+	else {
+		float fadeTransparency = 1.0f;
+	}
+	for (frames = 0; frames < 312; ++frames) {
+		ALLEGRO_EVENT event;
+		ALLEGRO_TIMEOUT timeout;
+
+		// Intalize timeout
+		al_init_timeout(&timeout, 0.06);
+
+		bool get_event = al_wait_for_event_until(event_queue, &event, &timeout);
+
+		if (get_event) {
+			switch (event.type) {
+			case ALLEGRO_EVENT_DISPLAY_CLOSE:
+				endProcess = true;
+				break;
+			case ALLEGRO_EVENT_TIMER:
+				redrawFade(image, fadeTransparency);
+				if (frames >= framesUpTo312) {
+					fadeTransparency += 0.025641;
+				}
+				break;
+			}
+		}
+	}
+
 	return 0;
 }
 
@@ -807,26 +840,7 @@ int main(int argc, char* argv[])
 	al_flip_display();
 
 	// Hound Productions
-	for (houndProductionsFrames = 0; houndProductionsFrames < 312; ++houndProductionsFrames) {
-		ALLEGRO_EVENT event;
-		ALLEGRO_TIMEOUT timeout;
-
-		// Intalize timeout
-		al_init_timeout(&timeout, 0.06);
-
-		bool get_event = al_wait_for_event_until(event_queue, &event, &timeout);
-
-		if (get_event) {
-			switch (event.type) {
-			case ALLEGRO_EVENT_DISPLAY_CLOSE:
-				return 0;
-				break;
-			case ALLEGRO_EVENT_TIMER:
-				redrawHoundProductions();
-				break;
-			}
-		}
-	}
+	fade(houndproductions, 234, true);
 
 	// Loading Screen
 	while (!startupDone) {
@@ -850,10 +864,7 @@ int main(int argc, char* argv[])
 		}
 		if (mouseX >= 1080) {
 			startupDone = true;
-			al_rest(1);
-			al_clear_to_color(al_map_rgb(0, 0, 0));
-			al_flip_display();
-			al_rest(1);
+			fade(bckground, 78, true);
 		}
 	}
 
