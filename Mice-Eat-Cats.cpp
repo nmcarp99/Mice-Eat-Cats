@@ -481,6 +481,10 @@ bool checkFood(ALLEGRO_KEYBOARD_STATE state)
 
 int play()
 {
+
+	fade(menubck, 0, true, 39);
+	fade(levelBackground[level], 0, false, 39);
+
 	mouseDir = 'f';
 
 	al_stop_sample_instance(backgroundMusicInstance);
@@ -525,6 +529,8 @@ int play()
 		}
 
 		if (checkEsc(state)) {
+			fade(levelBackground[level], 0, true, 39);
+			fade(menubck, 0, false, 39);
 			inGame = false;
 		}
 
@@ -633,6 +639,14 @@ int options()
 
 	bool mouse_button_1 = false;
 
+	fade(menubck, 0, true, 39);
+
+	if (!optionsx) {
+		fade(optionsybck, 0, false, 39);
+	}
+	else {
+		fade(optionsxbck, 0, false, 39);
+	}
 
 	while (inOptions) {
 		ALLEGRO_EVENT event;
@@ -661,6 +675,14 @@ int options()
 				}
 				else {
 					inOptions = false;
+					if (!optionsx) {
+						fade(optionsybck, 0, true, 39);
+					}
+					else {
+						fade(optionsxbck, 0, true, 39);
+					}
+					fade(menubck, 0, false, 39);
+					return 0;
 				}
 				mouse_button_1 = false;
 			}
