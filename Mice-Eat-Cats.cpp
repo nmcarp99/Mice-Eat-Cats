@@ -589,6 +589,10 @@ int play()
 
 int credits()
 {
+
+	fade(menubck, 0, true, 39);
+	fade(creditsbck, 0, false, 39);
+
 	bool inCredits = true;
 
 	bool mouse_button_1 = false;
