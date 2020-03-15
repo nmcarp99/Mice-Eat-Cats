@@ -30,7 +30,6 @@ ALLEGRO_SAMPLE_INSTANCE* gameMusicInstance = NULL;
 ALLEGRO_SAMPLE* gameMusic = NULL;
 ALLEGRO_EVENT_QUEUE* event_queue = NULL;
 ALLEGRO_TIMER* timer = NULL;
-int houndProductionsFrames = 0;
 int level = 0;
 int numSamples = 1;
 int mouseFrames = 0;
