@@ -531,7 +531,8 @@ int play()
 		if (checkEsc(state)) {
 			fade(levelBackground[level], 0, true, 39);
 			fade(menubck, 0, false, 39);
-			inGame = false;
+			al_stop_sample_instance(gameMusicInstance);
+			return 0;
 		}
 
 		if (checkLeft(state)) {
