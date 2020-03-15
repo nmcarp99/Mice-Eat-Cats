@@ -10,6 +10,7 @@ using namespace std;
 const float FPS = 60;
 ALLEGRO_BITMAP* houndproductions = NULL;
 ALLEGRO_BITMAP* levelBackground[2];
+ALLEGRO_BITMAP* wanderingrangerstudios = NULL;
 ALLEGRO_BITMAP* upmouse = NULL;
 ALLEGRO_BITMAP* foot = NULL;
 ALLEGRO_BITMAP* bckground = NULL;
@@ -845,6 +846,7 @@ int main(int argc, char* argv[])
 
 	// Load images
 	finish = al_load_bitmap("finish.png");
+	wanderingrangerstudios = al_load_bitmap("wanderingrangerstudios.png");
 	levelBackground[0] = al_load_bitmap("level1.png");
 	levelBackground[1] = al_load_bitmap("level2.png");;
 	foot = al_load_bitmap("foot.png");
@@ -868,6 +870,10 @@ int main(int argc, char* argv[])
 	// Hound Productions
 	fade(houndproductions, 78, false, 156);
 	if (!endProcess) fade(houndproductions, 234, true, 312);
+
+	// Wandering Ranger Studios
+	fade(wanderingrangerstudios, 78, false, 156);
+	if (!endProcess) fade(wanderingrangerstudios, 234, true, 312);
 
 	if (endProcess == true) {
 		return 0;
