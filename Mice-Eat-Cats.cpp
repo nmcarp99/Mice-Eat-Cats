@@ -639,6 +639,9 @@ int credits()
 		}
 	}
 
+	fade(creditsbck, 0, true, 39);
+	fade(menubck, 0, false, 39);
+
 	return 0;
 }
 
@@ -874,7 +877,7 @@ int main(int argc, char* argv[])
 	// Clear screen to black
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
-
+/*
 	// Hound Productions
 	fade(houndproductions, 78, false, 156);
 	if (!endProcess) fade(houndproductions, 234, true, 312);
@@ -917,7 +920,7 @@ int main(int argc, char* argv[])
 			fade(bckground, 39, true, 117);
 		}
 	}
-
+	*/
 	menu();
 
 	closeDisplay();
