@@ -32,6 +32,12 @@ ALLEGRO_SAMPLE_INSTANCE* gameMusicInstance = NULL;
 ALLEGRO_SAMPLE* gameMusic = NULL;
 ALLEGRO_EVENT_QUEUE* event_queue = NULL;
 ALLEGRO_TIMER* timer = NULL;
+int levelOneMapHor[] = {
+	100, 400
+};
+int levelOneMapVer[] = {
+	51, 211
+};
 int level = 0;
 int numSamples = 1;
 int mouseFrames = 0;
@@ -519,6 +525,21 @@ int play()
 
 		bool get_event = al_wait_for_event_until(event_queue, &event, &timeout);
 
+		for (int i = 0; i < (sizeof(levelOneMapHor)/sizeof(levelOneMapHor[0])); ++i) {
+			if (mouseDir == 'f' && levelProgress == levelOneMapHor[i] && mouseY == levelOneMapVer[i]) {
+				key_right = false;
+				break;
+			}
+			else if (mouseDir == 'b' && (levelProgress - 300) == levelOneMapHor[i] && mouseY == levelOneMapVer[i]) {
+				key_left = false;
+				break;
+			}
+			else {
+				key_right = true;
+				key_left = true;
+			}
+		}
+
 		if (targetMouseY > mouseY) {
 			mouseY = mouseY + 10;
 		}
@@ -539,7 +560,7 @@ int play()
 			return 0;
 		}
 
-		if (checkLeft(state)) {
+		if (checkLeft(state) && key_left) {
 			levelProgress = levelProgress - 10;
 			if (mouseX >= 280) {
 				mouseX = mouseX - 10;
@@ -558,7 +579,7 @@ int play()
 		if (checkDown(state)) {
 			targetMouseY = targetMouseY + 160;
 		}
-		if (checkRight(state)) {
+		if (checkRight(state) && key_right) {
 			levelProgress = levelProgress + 10;
 			if (mouseX <= 500) {
 				mouseX = mouseX + 10;
