@@ -9,6 +9,7 @@
 using namespace std;
 const float FPS = 60;
 ALLEGRO_BITMAP* houndproductions = NULL;
+ALLEGRO_BITMAP* itopimangianogatti = NULL;
 ALLEGRO_BITMAP* levelBackground[2];
 ALLEGRO_BITMAP* wanderingrangerstudios = NULL;
 ALLEGRO_BITMAP* upmouse = NULL;
@@ -190,6 +191,8 @@ int changeSound()
 int closeDisplay()
 {
 	al_destroy_display(display);
+	al_destroy_bitmap(wanderingrangerstudios);
+	al_destroy_bitmap(itopimangianogatti);
 	al_destroy_event_queue(event_queue);
 	al_destroy_bitmap(finish);
 	al_destroy_bitmap(houndproductions);
@@ -850,6 +853,7 @@ int main(int argc, char* argv[])
 
 	// Load images
 	finish = al_load_bitmap("finish.png");
+	itopimangianogatti = al_load_bitmap("itopimangianogatti.png");
 	wanderingrangerstudios = al_load_bitmap("wanderingrangerstudios.png");
 	levelBackground[0] = al_load_bitmap("level1.png");
 	levelBackground[1] = al_load_bitmap("level2.png");;
@@ -878,6 +882,10 @@ int main(int argc, char* argv[])
 	// Wandering Ranger Studios
 	fade(wanderingrangerstudios, 78, false, 156);
 	if (!endProcess) fade(wanderingrangerstudios, 234, true, 312);
+
+	// I Topi Mangiano Gatti
+	fade(itopimangianogatti, 78, false, 156);
+	if (!endProcess) fade(itopimangianogatti, 234, true, 312);
 
 	if (endProcess == true) {
 		return 0;
