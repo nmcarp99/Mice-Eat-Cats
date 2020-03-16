@@ -906,11 +906,11 @@ int main(int argc, char* argv[])
 	if (!endProcess) fade(houndproductions, 234, true, 312);
 
 	// Wandering Ranger Studios
-	fade(wanderingrangerstudios, 78, false, 156);
+	if (!endProcess) fade(wanderingrangerstudios, 78, false, 156);
 	if (!endProcess) fade(wanderingrangerstudios, 234, true, 312);
 
 	// I Topi Mangiano Gatti
-	fade(itopimangianogatti, 78, false, 156);
+	if (!endProcess) fade(itopimangianogatti, 78, false, 156);
 	if (!endProcess) fade(itopimangianogatti, 234, true, 312);
 
 	if (endProcess == true) {
