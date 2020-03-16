@@ -525,18 +525,20 @@ int play()
 
 		bool get_event = al_wait_for_event_until(event_queue, &event, &timeout);
 
-		for (int i = 0; i < (sizeof(levelOneMapHor)/sizeof(levelOneMapHor[0])); ++i) {
-			if (mouseDir == 'f' && levelProgress == levelOneMapHor[i] && mouseY == levelOneMapVer[i]) {
-				key_right = false;
-				break;
-			}
-			else if (mouseDir == 'b' && (levelProgress - 300) == levelOneMapHor[i] && mouseY == levelOneMapVer[i]) {
-				key_left = false;
-				break;
-			}
-			else {
-				key_right = true;
-				key_left = true;
+		if (level == 0) {
+			for (int i = 0; i < (sizeof(levelOneMapHor) / sizeof(levelOneMapHor[0])); ++i) {
+				if (mouseDir == 'f' && levelProgress == levelOneMapHor[i] && mouseY == levelOneMapVer[i]) {
+					key_right = false;
+					break;
+				}
+				else if (mouseDir == 'b' && (levelProgress - 300) == levelOneMapHor[i] && mouseY == levelOneMapVer[i]) {
+					key_left = false;
+					break;
+				}
+				else {
+					key_right = true;
+					key_left = true;
+				}
 			}
 		}
 
@@ -898,7 +900,7 @@ int main(int argc, char* argv[])
 	// Clear screen to black
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
-/*
+
 	// Hound Productions
 	fade(houndproductions, 78, false, 156);
 	if (!endProcess) fade(houndproductions, 234, true, 312);
@@ -941,7 +943,7 @@ int main(int argc, char* argv[])
 			fade(bckground, 39, true, 117);
 		}
 	}
-	*/
+
 	menu();
 
 	closeDisplay();
