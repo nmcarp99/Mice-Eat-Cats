@@ -367,13 +367,13 @@ int redrawGame()
 	}
 	al_draw_bitmap(levelBackground[level], backgroundX, 0, 0);
 	if (backgroundX <= -1) {
-		al_draw_bitmap(levelBackground[level], 1080 - (1080 * (backgroundX / (0 - 1080))), 0, 0);
+		al_draw_bitmap(levelBackground[level], backgroundX + 1080, 0, 0);
 	}
 	else if (backgroundX >= 1080) {
-		al_draw_bitmap(levelBackground[level], 1080 - (1080 * (backgroundX / 1080)), 0, 0);
+		al_draw_bitmap(levelBackground[level], 1080 - backgroundX, 0, 0);
 	}
 	if (numbackgroundPassed >= 3) {
-		al_draw_bitmap(finish, 1080 - (1080 * (backgroundX / (0 - 1080))), 0, 0);
+		al_draw_bitmap(finish, backgroundX + 1080, 0, 0);
 		if (backgroundX <= -720) {
 			numbackgroundPassed = 0;
 			++level;
