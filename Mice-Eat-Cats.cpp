@@ -42,10 +42,12 @@ int levelOneMapVer[] = {
 };
 
 int levelTwoMapHor[] = {
-	480, 480, 480, 480
+	480, 480, 480, 480,
+	-600, -600, -600, -600
 };
 
 int levelTwoMapVer[] = {
+	51, 211, 371, 531,
 	51, 211, 371, 531
 };
 
@@ -383,8 +385,16 @@ int redrawGame()
 		al_draw_bitmap(levelBackground[level], backgroundX + 1080, 0, 0);
 	}
 	if (level == 1) {
-		al_draw_filled_rectangle(backgroundX + 1080, 0, 1080, 640, al_map_rgb(0, 0, 0));
-		al_draw_filled_rectangle(0, 0, backgroundX, 640, al_map_rgb(0, 0, 0));
+		if (backgroundX < 0) {
+			// Draw right black and right wall
+			al_draw_filled_rectangle(backgroundX + 1080, 0, 1080, 640, al_map_rgb(0, 0, 0));
+			al_draw_filled_rectangle(backgroundX + 1080, 0, backgroundX + 1130, 640, al_map_rgb(156, 42, 42));
+		}
+		else if (backgroundX > 0) {
+			// Draw left black and left wall
+			al_draw_filled_rectangle(0, 0, backgroundX, 640, al_map_rgb(0, 0, 0));
+			al_draw_filled_rectangle(backgroundX - 50, 0, backgroundX, 640, al_map_rgb(156, 42, 42));
+		}
 	}
 	if (numbackgroundPassed >= 3) {
 		al_draw_bitmap(finish, backgroundX + 1080, 0, 0);
@@ -931,7 +941,7 @@ int main(int argc, char* argv[])
 	// Clear screen to black
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
-
+	
 	// Hound Productions
 	fade(houndproductions, 78, false, 156);
 	if (!endProcess) fade(houndproductions, 234, true, 312);
