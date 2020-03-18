@@ -32,12 +32,23 @@ ALLEGRO_SAMPLE_INSTANCE* gameMusicInstance = NULL;
 ALLEGRO_SAMPLE* gameMusic = NULL;
 ALLEGRO_EVENT_QUEUE* event_queue = NULL;
 ALLEGRO_TIMER* timer = NULL;
+
 int levelOneMapHor[] = {
 	100, 400
 };
+
 int levelOneMapVer[] = {
 	51, 211
 };
+
+int levelTwoMapHor[] = {
+	480, 480, 480, 480
+};
+
+int levelTwoMapVer[] = {
+	51, 211, 371, 531
+};
+
 int level = 0;
 int numSamples = 1;
 int mouseFrames = 0;
@@ -351,26 +362,29 @@ int levelEnd()
 
 int redrawGame()
 {
-	switch (mouseDir) {
-		case 'f':
-			if (backgroundX <= (0 - 1080)) {
-				backgroundX = 0;
-				numbackgroundPassed = numbackgroundPassed + 1;
-			}
-			break;
-		case 'b':
-			if (backgroundX >= 0) {
-				backgroundX = (0 - 1080);
-				numbackgroundPassed = numbackgroundPassed - 1;
-			}
-			break;
+	if (level != 1) {
+		switch (mouseDir) {
+			case 'f':
+				if (backgroundX <= (0 - 1080)) {
+					backgroundX = 0;
+					numbackgroundPassed = numbackgroundPassed + 1;
+				}
+				break;
+			case 'b':
+				if (backgroundX >= 0) {
+					backgroundX = (0 - 1080);
+					numbackgroundPassed = numbackgroundPassed - 1;
+				}
+				break;
+		}
 	}
 	al_draw_bitmap(levelBackground[level], backgroundX, 0, 0);
-	if (backgroundX <= -1) {
+	if (backgroundX <= -1 && level != 1) {
 		al_draw_bitmap(levelBackground[level], backgroundX + 1080, 0, 0);
 	}
-	else if (backgroundX >= 1080) {
-		al_draw_bitmap(levelBackground[level], 1080 - backgroundX, 0, 0);
+	if (level == 1) {
+		al_draw_filled_rectangle(backgroundX + 1080, 0, 1080, 640, al_map_rgb(0, 0, 0));
+		al_draw_filled_rectangle(0, 0, backgroundX, 640, al_map_rgb(0, 0, 0));
 	}
 	if (numbackgroundPassed >= 3) {
 		al_draw_bitmap(finish, backgroundX + 1080, 0, 0);
@@ -527,11 +541,28 @@ int play()
 
 		if (level == 0) {
 			for (int i = 0; i < (sizeof(levelOneMapHor) / sizeof(levelOneMapHor[0])); ++i) {
-				if (mouseDir == 'f' && levelProgress == levelOneMapHor[i] && mouseY == levelOneMapVer[i]) {
+				if (mouseDir == 'f' && levelProgress == levelOneMapHor[i] && targetMouseY == levelOneMapVer[i]) {
 					key_right = false;
 					break;
 				}
-				else if (mouseDir == 'b' && (levelProgress - 300) == levelOneMapHor[i] && mouseY == levelOneMapVer[i]) {
+				else if (mouseDir == 'b' && (levelProgress - 300) == levelOneMapHor[i] && targetMouseY == levelOneMapVer[i]) {
+					key_left = false;
+					break;
+				}
+				else {
+					key_right = true;
+					key_left = true;
+				}
+			}
+		}
+
+		else if (level == 1) {
+			for (int i = 0; i < (sizeof(levelTwoMapHor) / sizeof(levelTwoMapHor[0])); ++i) {
+				if (mouseDir == 'f' && levelProgress == levelTwoMapHor[i] && targetMouseY == levelTwoMapVer[i]) {
+					key_right = false;
+					break;
+				}
+				else if (mouseDir == 'b' && (levelProgress - 300) == levelTwoMapHor[i] && targetMouseY == levelTwoMapVer[i]) {
 					key_left = false;
 					break;
 				}
