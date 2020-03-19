@@ -32,6 +32,10 @@ ALLEGRO_BITMAP* houseentryway3 = NULL;
 ALLEGRO_BITMAP* houseentryway4 = NULL;
 ALLEGRO_BITMAP* finish = NULL;
 ALLEGRO_DISPLAY* display = NULL;
+ALLEGRO_SAMPLE_INSTANCE* gongInstance = NULL;
+ALLEGRO_SAMPLE* gong = NULL;
+ALLEGRO_SAMPLE_INSTANCE* horrorSceneInstance = NULL;
+ALLEGRO_SAMPLE* horrorScene = NULL;
 ALLEGRO_SAMPLE_INSTANCE* backgroundMusicInstance = NULL;
 ALLEGRO_SAMPLE* backgroundMusic = NULL;
 ALLEGRO_SAMPLE_INSTANCE* gameMusicInstance = NULL;
@@ -127,16 +131,6 @@ int fade(ALLEGRO_BITMAP* image, int framesUpTo312, bool trueForOutFalseForIn, in
 		}
 	}
 
-	return 0;
-}
-
-int intro() {
-	if (!endProcess) fade(houseentryway, 117, false, 117);
-	if (!endProcess) fade(houseentryway, 0, true, 117);
-	if (!endProcess) fade(houseentryway1, 0, true, 117);
-	if (!endProcess) fade(houseentryway2, 0, true, 117);
-	if (!endProcess) fade(houseentryway3, 0, true, 117);
-	if (!endProcess) fade(houseentryway4, 0, true, 156);
 	return 0;
 }
 
@@ -559,7 +553,35 @@ int play()
 	fade(menubck, 0, true, 39);
 	al_stop_sample_instance(backgroundMusicInstance);
 	if (level == 0) {
-		intro();
+
+		al_play_sample_instance(horrorSceneInstance);
+		if (!endProcess) fade(houseentryway, 0, true, 39);
+		if (!endProcess) fade(houseentryway, 78, false, 78);
+		al_stop_sample_instance(horrorSceneInstance);
+
+		al_play_sample_instance(horrorSceneInstance);
+		if (!endProcess) fade(houseentryway1, 0, true, 39);
+		if (!endProcess) fade(houseentryway1, 78, false, 78);
+		al_stop_sample_instance(horrorSceneInstance);
+
+		al_play_sample_instance(horrorSceneInstance);
+		if (!endProcess) fade(houseentryway2, 0, true, 39);
+		if (!endProcess) fade(houseentryway2, 78, false, 78);
+		al_stop_sample_instance(horrorSceneInstance);
+
+		al_play_sample_instance(horrorSceneInstance);
+		if (!endProcess) fade(houseentryway3, 0, true, 39);
+		if (!endProcess) fade(houseentryway3, 78, false, 78);
+		al_stop_sample_instance(horrorSceneInstance);
+
+		al_play_sample_instance(horrorSceneInstance);
+		if (!endProcess) fade(houseentryway4, 0, true, 39);
+		if (!endProcess) fade(houseentryway4, 117, false, 117);
+		al_stop_sample_instance(horrorSceneInstance);
+
+		al_play_sample_instance(gongInstance);
+		while (al_get_sample_instance_playing(gongInstance)) {}
+
 		if (endProcess) {
 			return 0;
 		}
@@ -958,6 +980,14 @@ int main(int argc, char* argv[])
 	backgroundMusic = al_load_sample("backgroundmusic.wav");
 	backgroundMusicInstance = al_create_sample_instance(backgroundMusic);
 	al_attach_sample_instance_to_mixer(backgroundMusicInstance, al_get_default_mixer());
+
+	horrorScene = al_load_sample("horrorscene.wav");
+	horrorSceneInstance = al_create_sample_instance(horrorScene);
+	al_attach_sample_instance_to_mixer(horrorSceneInstance, al_get_default_mixer());
+
+	gong = al_load_sample("gong.wav");
+	gongInstance = al_create_sample_instance(gong);
+	al_attach_sample_instance_to_mixer(gongInstance, al_get_default_mixer());
 
 	gameMusic = al_load_sample("gamemusic.wav");
 	gameMusicInstance = al_create_sample_instance(gameMusic);
