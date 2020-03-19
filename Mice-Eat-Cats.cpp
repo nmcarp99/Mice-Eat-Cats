@@ -323,6 +323,10 @@ int redrawMenu()
 
 int levelEnd(ALLEGRO_BITMAP* bck)
 {
+
+	fade(levelBackground[level], 39, true, 117);
+	fade(bck, 39, false, 117);
+
 	bool inLevelEnd = true;
 
 	bool mouse_button_1 = false;
@@ -355,11 +359,27 @@ int levelEnd(ALLEGRO_BITMAP* bck)
 		}
 		else {
 			if (!(state.buttons & 1)) {
-				if (state.x >= 90 && state.x <= 990 && state.y >= 256 && state.y <= 346) {
-					changeSound();
-				}
-				else {
-					inLevelEnd = false;
+				if (state.x >= 427 && state.x <= 653) {
+					if (state.y >= 165 && state.y <= 256) {
+						inLevelEnd = false;
+						++level;
+						fade(bck, 39, true, 117);
+						fade(levelBackground[level], 39, false, 117);
+						return 0;
+					}
+					else if (state.y >= 300 && state.y <= 391) {
+						inLevelEnd = false;
+						fade(bck, 39, true, 117);
+						fade(levelBackground[level], 39, false, 117);
+						return 0;
+					}
+					else if (state.y >= 435 && state.y <= 526) {
+						inGame = false;
+						inLevelEnd = false;
+						fade(bck, 39, true, 117);
+						fade(menubck, 39, false, 117);
+						return 0;
+					}
 				}
 				mouse_button_1 = false;
 			}
@@ -422,7 +442,6 @@ int redrawGame()
 		al_draw_bitmap(finish, backgroundX + 1080, 0, 0);
 		if (backgroundX <= -720) {
 			numbackgroundPassed = 0;
-			++level;
 			levelEnd(levelpassed);
 		}
 	}
@@ -973,7 +992,7 @@ int main(int argc, char* argv[])
 	// Clear screen to black
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
-	
+	menu();
 	// Hound Productions
 	if (!endProcess) fade(houndproductions, 78, false, 156);
 	if (!endProcess) fade(houndproductions, 234, true, 312);
