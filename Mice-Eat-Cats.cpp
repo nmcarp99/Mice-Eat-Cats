@@ -554,33 +554,34 @@ int play()
 	al_stop_sample_instance(backgroundMusicInstance);
 	if (level == 0) {
 
-		al_play_sample_instance(horrorSceneInstance);
+		if (!optionsx && !endProcess) al_play_sample_instance(horrorSceneInstance);
+		if (!endProcess) fade(houseentryway, 117, false, 117);
 		if (!endProcess) fade(houseentryway, 0, true, 39);
 		if (!endProcess) fade(houseentryway, 78, false, 78);
-		al_stop_sample_instance(horrorSceneInstance);
+		if (!optionsx && !endProcess) al_stop_sample_instance(horrorSceneInstance);
 
-		al_play_sample_instance(horrorSceneInstance);
+		if (!optionsx && !endProcess) al_play_sample_instance(horrorSceneInstance);
 		if (!endProcess) fade(houseentryway1, 0, true, 39);
 		if (!endProcess) fade(houseentryway1, 78, false, 78);
-		al_stop_sample_instance(horrorSceneInstance);
+		if (!optionsx && !endProcess) al_stop_sample_instance(horrorSceneInstance);
 
-		al_play_sample_instance(horrorSceneInstance);
+		if (!optionsx && !endProcess) al_play_sample_instance(horrorSceneInstance);
 		if (!endProcess) fade(houseentryway2, 0, true, 39);
 		if (!endProcess) fade(houseentryway2, 78, false, 78);
-		al_stop_sample_instance(horrorSceneInstance);
+		if (!optionsx && !endProcess) al_stop_sample_instance(horrorSceneInstance);
 
-		al_play_sample_instance(horrorSceneInstance);
+		if (!optionsx && !endProcess) al_play_sample_instance(horrorSceneInstance);
 		if (!endProcess) fade(houseentryway3, 0, true, 39);
 		if (!endProcess) fade(houseentryway3, 78, false, 78);
-		al_stop_sample_instance(horrorSceneInstance);
+		if (!optionsx && !endProcess) al_stop_sample_instance(horrorSceneInstance);
 
-		al_play_sample_instance(horrorSceneInstance);
+		if (!optionsx && !endProcess) al_play_sample_instance(horrorSceneInstance);
 		if (!endProcess) fade(houseentryway4, 0, true, 39);
 		if (!endProcess) fade(houseentryway4, 117, false, 117);
-		al_stop_sample_instance(horrorSceneInstance);
+		if (!optionsx && !endProcess) al_stop_sample_instance(horrorSceneInstance);
 
-		al_play_sample_instance(gongInstance);
-		while (al_get_sample_instance_playing(gongInstance)) {}
+		if (!optionsx && !endProcess) al_play_sample_instance(gongInstance);
+		if (!optionsx && !endProcess) while (al_get_sample_instance_playing(gongInstance)) {}
 
 		if (endProcess) {
 			return 0;
