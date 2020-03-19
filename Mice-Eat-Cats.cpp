@@ -554,8 +554,8 @@ int play()
 	al_stop_sample_instance(backgroundMusicInstance);
 	if (level == 0) {
 
-		if (!optionsx && !endProcess) al_play_sample_instance(horrorSceneInstance);
 		if (!endProcess) fade(houseentryway, 117, false, 117);
+		if (!optionsx && !endProcess) al_play_sample_instance(horrorSceneInstance);
 		if (!endProcess) fade(houseentryway, 0, true, 39);
 		if (!endProcess) fade(houseentryway, 78, false, 78);
 		if (!optionsx && !endProcess) al_stop_sample_instance(horrorSceneInstance);
