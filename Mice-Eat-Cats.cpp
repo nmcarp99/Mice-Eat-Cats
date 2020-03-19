@@ -24,6 +24,11 @@ ALLEGRO_BITMAP* smallmouse = NULL;
 ALLEGRO_BITMAP* smallmouse1 = NULL;
 ALLEGRO_BITMAP* backsmallmouse = NULL;
 ALLEGRO_BITMAP* backsmallmouse1 = NULL;
+ALLEGRO_BITMAP* houseentryway = NULL;
+ALLEGRO_BITMAP* houseentryway1 = NULL;
+ALLEGRO_BITMAP* houseentryway2 = NULL;
+ALLEGRO_BITMAP* houseentryway3 = NULL;
+ALLEGRO_BITMAP* houseentryway4 = NULL;
 ALLEGRO_BITMAP* finish = NULL;
 ALLEGRO_DISPLAY* display = NULL;
 ALLEGRO_SAMPLE_INSTANCE* backgroundMusicInstance = NULL;
@@ -124,6 +129,16 @@ int fade(ALLEGRO_BITMAP* image, int framesUpTo312, bool trueForOutFalseForIn, in
 	return 0;
 }
 
+int intro() {
+	if (!endProcess) fade(houseentryway, 117, false, 117);
+	if (!endProcess) fade(houseentryway, 0, true, 117);
+	if (!endProcess) fade(houseentryway1, 0, true, 117);
+	if (!endProcess) fade(houseentryway2, 0, true, 117);
+	if (!endProcess) fade(houseentryway3, 0, true, 117);
+	if (!endProcess) fade(houseentryway4, 0, true, 156);
+	return 0;
+}
+
 int easterFoot()
 {
 	smallmouse = al_load_bitmap("rat.png");
@@ -210,6 +225,11 @@ int changeSound()
 int closeDisplay()
 {
 	al_destroy_display(display);
+	al_destroy_bitmap(houseentryway);
+	al_destroy_bitmap(houseentryway1);
+	al_destroy_bitmap(houseentryway2);
+	al_destroy_bitmap(houseentryway3);
+	al_destroy_bitmap(houseentryway4);
 	al_destroy_bitmap(wanderingrangerstudios);
 	al_destroy_bitmap(itopimangianogatti);
 	al_destroy_event_queue(event_queue);
@@ -515,13 +535,17 @@ bool checkFood(ALLEGRO_KEYBOARD_STATE state)
 
 int play()
 {
-
 	fade(menubck, 0, true, 39);
+	al_stop_sample_instance(backgroundMusicInstance);
+	if (level == 0) {
+		intro();
+		if (endProcess) {
+			return 0;
+		}
+	}
 	fade(levelBackground[level], 0, false, 39);
 
 	mouseDir = 'f';
-
-	al_stop_sample_instance(backgroundMusicInstance);
 
 	levelProgress = 0;
 	backgroundX = 0;
@@ -920,6 +944,11 @@ int main(int argc, char* argv[])
 
 	// Load images
 	finish = al_load_bitmap("finish.png");
+	houseentryway = al_load_bitmap("houseentryway.png");
+	houseentryway1 = al_load_bitmap("houseentryway1.png");
+	houseentryway2 = al_load_bitmap("houseentryway2.png");
+	houseentryway3 = al_load_bitmap("houseentryway3.png");
+	houseentryway4 = al_load_bitmap("houseentryway4.png");
 	itopimangianogatti = al_load_bitmap("itopimangianogatti.png");
 	wanderingrangerstudios = al_load_bitmap("wanderingrangerstudios.png");
 	levelBackground[0] = al_load_bitmap("level1.png");
@@ -943,7 +972,7 @@ int main(int argc, char* argv[])
 	al_flip_display();
 	
 	// Hound Productions
-	fade(houndproductions, 78, false, 156);
+	if (!endProcess) fade(houndproductions, 78, false, 156);
 	if (!endProcess) fade(houndproductions, 234, true, 312);
 
 	// Wandering Ranger Studios
