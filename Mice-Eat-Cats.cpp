@@ -12,6 +12,7 @@ ALLEGRO_BITMAP* houndproductions = NULL;
 ALLEGRO_BITMAP* itopimangianogatti = NULL;
 ALLEGRO_BITMAP* levelBackground[2];
 ALLEGRO_BITMAP* wanderingrangerstudios = NULL;
+ALLEGRO_BITMAP* levelpassed = NULL;
 ALLEGRO_BITMAP* upmouse = NULL;
 ALLEGRO_BITMAP* foot = NULL;
 ALLEGRO_BITMAP* bckground = NULL;
@@ -225,6 +226,7 @@ int changeSound()
 int closeDisplay()
 {
 	al_destroy_display(display);
+	al_destroy_bitmap(levelpassed);
 	al_destroy_bitmap(houseentryway);
 	al_destroy_bitmap(houseentryway1);
 	al_destroy_bitmap(houseentryway2);
@@ -288,9 +290,9 @@ int drawOptions()
 	return 0;
 }
 
-int drawLevelEnd()
+int drawLevelEnd(ALLEGRO_BITMAP* bck)
 {
-	al_draw_bitmap(optionsybck, 0, 0, 0);
+	al_draw_bitmap(bck, 0, 0, 0);
 	//draw here
 	al_flip_display();
 	return 0;
@@ -319,7 +321,7 @@ int redrawMenu()
 	return 0;
 }
 
-int levelEnd()
+int levelEnd(ALLEGRO_BITMAP* bck)
 {
 	bool inLevelEnd = true;
 
@@ -370,7 +372,7 @@ int levelEnd()
 				endProcess = true;
 				break;
 			case ALLEGRO_EVENT_TIMER:
-				drawLevelEnd();
+				drawLevelEnd(bck);
 				break;
 
 			}
@@ -421,7 +423,7 @@ int redrawGame()
 		if (backgroundX <= -720) {
 			numbackgroundPassed = 0;
 			++level;
-			levelEnd();
+			levelEnd(levelpassed);
 		}
 	}
 
@@ -944,6 +946,7 @@ int main(int argc, char* argv[])
 
 	// Load images
 	finish = al_load_bitmap("finish.png");
+	levelpassed = al_load_bitmap("levelpassed.png");
 	houseentryway = al_load_bitmap("houseentryway.png");
 	houseentryway1 = al_load_bitmap("houseentryway1.png");
 	houseentryway2 = al_load_bitmap("houseentryway2.png");
