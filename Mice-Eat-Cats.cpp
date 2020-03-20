@@ -245,6 +245,10 @@ int closeDisplay()
 	al_destroy_bitmap(upmouse);
 	al_destroy_bitmap(bckground);
 	al_destroy_bitmap(menubck);
+	al_destroy_sample(gong);
+	al_destroy_sample_instance(gongInstance);
+	al_destroy_sample(horrorScene);
+	al_destroy_sample_instance(horrorSceneInstance);
 	al_destroy_sample(backgroundMusic);
 	al_destroy_sample_instance(backgroundMusicInstance);
 
