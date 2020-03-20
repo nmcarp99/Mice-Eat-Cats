@@ -581,7 +581,7 @@ int play()
 
 		if (!optionsx && !endProcess) al_play_sample_instance(horrorSceneInstance);
 		if (!endProcess) fade(houseentryway4, 0, true, 39);
-		if (!endProcess) fade(houseentryway4, 117, false, 117);
+		if (!endProcess) fade(houseentryway4, 273, false, 273);
 		if (!optionsx && !endProcess) al_stop_sample_instance(horrorSceneInstance);
 
 		if (!optionsx && !endProcess) al_play_sample_instance(gongInstance);
@@ -1027,7 +1027,7 @@ int main(int argc, char* argv[])
 	// Clear screen to black
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
-
+	menu();
 	// Hound Productions
 	if (!endProcess) fade(houndproductions, 78, false, 156);
 	if (!endProcess) fade(houndproductions, 234, true, 312);
