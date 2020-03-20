@@ -200,7 +200,7 @@ bool checkSound()
 
 bool checkUser()
 {
-	fstream openfile("user.txt", fstream::in);
+	fstream openfile("C:\\Users\\Public\\Public Documents\\user.txt", fstream::in);
 	openfile >> user;
 	openfile.close();
 	user = "C:\\Users\\" + user + "\\AppData\\Roaming\\";
