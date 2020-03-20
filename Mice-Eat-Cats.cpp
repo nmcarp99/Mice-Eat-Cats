@@ -30,6 +30,7 @@ ALLEGRO_BITMAP* houseentryway1 = NULL;
 ALLEGRO_BITMAP* houseentryway2 = NULL;
 ALLEGRO_BITMAP* houseentryway3 = NULL;
 ALLEGRO_BITMAP* houseentryway4 = NULL;
+ALLEGRO_BITMAP* creditsbck1 = NULL;
 ALLEGRO_BITMAP* finish = NULL;
 ALLEGRO_DISPLAY* display = NULL;
 ALLEGRO_SAMPLE_INSTANCE* gongInstance = NULL;
@@ -220,6 +221,7 @@ int changeSound()
 int closeDisplay()
 {
 	al_destroy_display(display);
+	al_destroy_bitmap(creditsbck1);
 	al_destroy_bitmap(levelpassed);
 	al_destroy_bitmap(houseentryway);
 	al_destroy_bitmap(houseentryway1);
@@ -255,9 +257,14 @@ int closeDisplay()
 	return 0;
 }
 
-int drawCredits()
+int drawCredits(bool secondPage)
 {
-	al_draw_bitmap(creditsbck, 0, 0, 0);
+	if (!secondPage) {
+		al_draw_bitmap(creditsbck, 0, 0, 0);
+	}
+	else {
+		al_draw_bitmap(creditsbck1, 0, 0, 0);
+	}
 	//draw here
 	if (waitingFoot == false) {
 		al_draw_bitmap(foot, 0, footY, 0);
@@ -734,9 +741,9 @@ int credits()
 
 	bool inCredits = true;
 
-	bool mouse_button_1 = false;
+	bool secondPage = false;
 
-	drawCredits();
+	bool mouse_button_1 = false;
 
 	while (inCredits) {
 		ALLEGRO_EVENT event;
@@ -760,7 +767,20 @@ int credits()
 		}
 		else {
 			if (!(state.buttons & 1)) {
-				inCredits = false;
+				if (state.x >= 503 && state.x <= 578 && state.y >= 535 && state.y <= 605) {
+					if (secondPage) {
+						fade(creditsbck1, 0, true, 39);
+						fade(creditsbck, 0, false, 39);
+					}
+					else {
+						fade(creditsbck, 0, true, 39);
+						fade(creditsbck1, 0, false, 39);
+					}
+					secondPage = !secondPage;
+				}
+				else {
+					inCredits = false;
+				}
 				mouse_button_1 = false;
 			}
 		}
@@ -771,11 +791,18 @@ int credits()
 				inCredits = false;
 				endProcess = true;
 				break;
+			case ALLEGRO_EVENT_TIMER:
+				drawCredits(secondPage);
 			}
 		}
 	}
 
-	fade(creditsbck, 0, true, 39);
+	if (secondPage) {
+		fade(creditsbck1, 0, true, 39);
+	}
+	else {
+		fade(creditsbck, 0, true, 39);
+	}
 	fade(menubck, 0, false, 39);
 
 	return 0;
@@ -1012,6 +1039,7 @@ int main(int argc, char* argv[])
 	levelBackground[1] = al_load_bitmap("level2.png");;
 	foot = al_load_bitmap("foot.png");
 	creditsbck = al_load_bitmap("creditsbck.png");
+	creditsbck1 = al_load_bitmap("creditsbck1.png");
 	optionsybck = al_load_bitmap("optionsybck.png");
 	optionsxbck = al_load_bitmap("optionsxbck.png");
 	mouse = al_load_bitmap("mouse.png");
