@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <allegro5/allegro.h>
+#include <string>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
@@ -8,6 +9,7 @@
 
 using namespace std;
 const float FPS = 60;
+string user;
 ALLEGRO_BITMAP* houndproductions = NULL;
 ALLEGRO_BITMAP* itopimangianogatti = NULL;
 ALLEGRO_BITMAP* levelBackground[2];
@@ -162,7 +164,7 @@ int check_for_restart_gamemusic()
 
 bool checkLevel()
 {
-	fstream openfile("level.txt", fstream::in);
+	fstream openfile(user+"level.txt", fstream::in);
 	int text;
 	openfile>>text;
 	openfile.close();
@@ -172,7 +174,7 @@ bool checkLevel()
 
 int changeLevel()
 {
-	fstream file("level.txt", fstream::out);
+	fstream file(user+"level.txt", fstream::out);
 	file<<level;
 	file.close();
 
@@ -181,7 +183,7 @@ int changeLevel()
 
 bool checkSound()
 {
-	fstream openfile("sound.txt", fstream::in);
+	fstream openfile(user+"sound.txt", fstream::in);
 	char text;
 	openfile >> text;
 	openfile.close();
@@ -196,13 +198,22 @@ bool checkSound()
 	return 0;
 }
 
+bool checkUser()
+{
+	fstream openfile("user.txt", fstream::in);
+	openfile >> user;
+	openfile.close();
+	user = "C:\\Users\\" + user + "\\AppData\\Roaming\\";
+	return 0;
+}
+
 int changeSound()
 {
-	fstream openfile("sound.txt", fstream::in);
+	fstream openfile(user+"sound.txt", fstream::in);
 	char text;
 	openfile >> text;
 	openfile.close();
-	fstream file("sound.txt", fstream::out);
+	fstream file(user+"sound.txt", fstream::out);
 	if (text == '0') {
 		file << "1";
 		optionsx = false;
@@ -987,6 +998,9 @@ int menu()
 
 int main(int argc, char* argv[])
 {
+
+	checkUser();
+
 	checkSound();
 
 	bool startupDone = false;
