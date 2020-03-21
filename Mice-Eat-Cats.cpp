@@ -97,7 +97,7 @@ int redrawFade(ALLEGRO_BITMAP* image, float fadeTransparency)
 	return 0;
 }
 
-int fade(ALLEGRO_BITMAP* image, int framesUpTo312, bool trueForOutFalseForIn, int totalLength)
+int fade(ALLEGRO_BITMAP* image, int framesUpTo312, bool trueForOutFalseForIn, int totalLength, bool levelFade = false)
 {
 	int frames = 0;
 	float fadeTransparency = 0.0f;
@@ -120,7 +120,57 @@ int fade(ALLEGRO_BITMAP* image, int framesUpTo312, bool trueForOutFalseForIn, in
 				return 0;
 				break;
 			case ALLEGRO_EVENT_TIMER:
-				redrawFade(image, fadeTransparency);
+				if (levelFade) {
+					al_draw_bitmap(levelBackground[level], backgroundX, 0, 0);
+					if (backgroundX <= -1 && level != 1) {
+						al_draw_bitmap(levelBackground[level], backgroundX + 1080, 0, 0);
+					}
+					if (level == 1) {
+						if (backgroundX < 0) {
+							// Draw right black and right wall
+							al_draw_filled_rectangle(backgroundX + 1080, 0, 1080, 640, al_map_rgb(0, 0, 0));
+							al_draw_filled_rectangle(backgroundX + 1080, 0, backgroundX + 1130, 640, al_map_rgb(156, 42, 42));
+						}
+						else if (backgroundX > 0) {
+							// Draw left black and left wall
+							al_draw_filled_rectangle(0, 0, backgroundX, 640, al_map_rgb(0, 0, 0));
+							al_draw_filled_rectangle(backgroundX - 50, 0, backgroundX, 640, al_map_rgb(156, 42, 42));
+						}
+					}
+					if (numbackgroundPassed >= 3) {
+						al_draw_bitmap(finish, backgroundX + 1080, 0, 0);
+					}
+
+					//draw here
+					if (targetMouseY != mouseY) {
+						al_draw_bitmap(upmouse, mouseX, mouseY, 0);
+					}
+					else {
+						switch (mouseDir) {
+						case 'f':
+							if (!mouse1) {
+								al_draw_bitmap(smallmouse, mouseX, mouseY, 0);
+							}
+							else {
+								al_draw_bitmap(smallmouse1, mouseX, mouseY, 0);
+							}
+							break;
+						case 'b':
+							if (!mouse1) {
+								al_draw_bitmap(backsmallmouse, mouseX, mouseY, 0);
+							}
+							else {
+								al_draw_bitmap(backsmallmouse1, mouseX, mouseY, 0);
+							}
+							break;
+						}
+					}
+					al_draw_filled_rectangle(0, 0, 1080, 640, al_map_rgba_f(0, 0, 0, fadeTransparency));
+					al_flip_display();
+				}
+				else {
+					redrawFade(image, fadeTransparency);
+				}
 				if (frames >= framesUpTo312) {
 					if (trueForOutFalseForIn == true) {
 						fadeTransparency += 0.025641;
@@ -340,7 +390,7 @@ int redrawMenu()
 int levelEnd(ALLEGRO_BITMAP* bck)
 {
 
-	fade(levelBackground[level], 39, true, 117);
+	fade(levelBackground[level], 39, true, 117, true);
 	fade(bck, 39, false, 117);
 
 	bool inLevelEnd = true;
@@ -687,7 +737,7 @@ int play()
 		}
 
 		if (checkEsc(state)) {
-			fade(levelBackground[level], 0, true, 39);
+			fade(levelBackground[level], 0, true, 39, true);
 			fade(menubck, 0, false, 39);
 			al_stop_sample_instance(gameMusicInstance);
 			return 0;
