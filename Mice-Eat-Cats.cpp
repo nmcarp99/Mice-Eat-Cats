@@ -10,6 +10,7 @@
 using namespace std;
 const float FPS = 60;
 string user;
+ALLEGRO_BITMAP* icon = NULL;
 ALLEGRO_BITMAP* houndproductions = NULL;
 ALLEGRO_BITMAP* itopimangianogatti = NULL;
 ALLEGRO_BITMAP* levelBackground[2];
@@ -282,6 +283,7 @@ int changeSound()
 int closeDisplay()
 {
 	al_destroy_display(display);
+	al_destroy_bitmap(icon);
 	al_destroy_bitmap(creditsbck1);
 	al_destroy_bitmap(levelpassed);
 	al_destroy_bitmap(houseentryway);
@@ -1091,6 +1093,7 @@ int main(int argc, char* argv[])
 
 	// Load images
 	finish = al_load_bitmap("finish.png");
+	icon = al_load_bitmap("icon.png");
 	levelpassed = al_load_bitmap("levelpassed.png");
 	houseentryway = al_load_bitmap("houseentryway.png");
 	houseentryway1 = al_load_bitmap("houseentryway1.png");
@@ -1115,6 +1118,8 @@ int main(int argc, char* argv[])
 	bckground = al_load_bitmap("bckground.jpeg");
 	menubck = al_load_bitmap("menubck.png");
 	houndproductions = al_load_bitmap("houndproductions.png");
+
+	al_set_display_icon(display, icon);
 
 	// Clear screen to black
 	al_clear_to_color(al_map_rgb(0, 0, 0));
