@@ -433,6 +433,7 @@ int levelEnd(ALLEGRO_BITMAP* bck)
 						++level;
 						fade(bck, 39, true, 117);
 						fade(levelBackground[level], 39, false, 117);
+						changeLevel();
 						return 0;
 					}
 					else if (state.y >= 300 && state.y <= 391) {
@@ -466,8 +467,6 @@ int levelEnd(ALLEGRO_BITMAP* bck)
 			}
 		}
 	}
-
-	changeLevel();
 
 	return 0;
 }
@@ -1124,7 +1123,7 @@ int main(int argc, char* argv[])
 	// Clear screen to black
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
-
+	
 	// Hound Productions
 	if (!endProcess) fade(houndproductions, 78, false, 156);
 	if (!endProcess) fade(houndproductions, 234, true, 312);
