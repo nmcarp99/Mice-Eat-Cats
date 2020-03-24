@@ -50,6 +50,7 @@ ALLEGRO_SAMPLE* gameMusic = NULL;
 ALLEGRO_EVENT_QUEUE* event_queue = NULL;
 ALLEGRO_TIMER* timer = NULL;
 
+// Level One Map
 int levelOneMapHor[] = {
 	100, 400
 };
@@ -58,6 +59,8 @@ int levelOneMapVer[] = {
 	51, 211
 };
 
+// Level Two Map
+
 int levelTwoMapHor[] = {
 	480, 480, 480, 480,
 	-600, -600, -600, -600
@@ -65,6 +68,15 @@ int levelTwoMapHor[] = {
 
 int levelTwoMapVer[] = {
 	51, 211, 371, 531,
+	51, 211, 371, 531
+};
+
+// Level Three Map
+int levelThreeMapHor[] = {
+	-300, -300, -300, -300
+};
+
+int levelThreeMapVer[] = {
 	51, 211, 371, 531
 };
 
@@ -143,6 +155,17 @@ int fade(ALLEGRO_BITMAP* image, int framesUpTo312, bool trueForOutFalseForIn, in
 					}
 					if (numbackgroundPassed >= 3) {
 						al_draw_bitmap(finish, backgroundX + 1080, 0, 0);
+					}
+
+					if (level == 0) {
+						for (int x = 0; x < sizeof(levelOneMapHor) / sizeof(levelOneMapHor[0]); ++x) {
+							al_draw_filled_rectangle((levelOneMapHor[x] - levelProgress) + mouseX + 300, levelOneMapVer[x], (levelOneMapHor[x] - levelProgress) + (mouseX + 310), levelOneMapVer[x] + 61, al_map_rgb(156, 42, 42));
+						}
+					}
+					if (level == 2) {
+						for (int x = 0; x < sizeof(levelThreeMapHor) / sizeof(levelThreeMapHor[0]); ++x) {
+							al_draw_filled_rectangle((levelThreeMapHor[x] - levelProgress) + mouseX + 300, levelThreeMapVer[x], (levelThreeMapHor[x] - levelProgress) + (mouseX + 310), levelThreeMapVer[x] + 61, al_map_rgb(156, 42, 42));
+						}
 					}
 
 					//draw here
@@ -505,12 +528,16 @@ int levelEnd(ALLEGRO_BITMAP* bck)
 						fade(bck, 39, true, 117);
 						fade(levelBackground[level], 39, false, 117);
 						changeLevel();
+						numbackgroundPassed = 0;
+
 						return 0;
 					}
 					else if (state.y >= 225 && state.y <= 325) {
 						inLevelEnd = false;
 						fade(bck, 39, true, 117);
 						fade(levelBackground[level], 39, false, 117);
+						numbackgroundPassed = 0;
+
 						return 0;
 					}
 					else if (state.y >= 325 && state.y <= 425) {
@@ -525,6 +552,7 @@ int levelEnd(ALLEGRO_BITMAP* bck)
 						changeLevel();
 						fade(bck, 39, true, 117);
 						fade(menubck, 39, false, 117);
+						numbackgroundPassed = 0;
 						return 0;
 					}
 				}
@@ -549,24 +577,7 @@ int levelEnd(ALLEGRO_BITMAP* bck)
 	return 0;
 }
 
-int redrawGame()
-{
-	if (level != 1) {
-		switch (mouseDir) {
-			case 'f':
-				if (backgroundX <= (0 - 1080)) {
-					backgroundX = 0;
-					numbackgroundPassed = numbackgroundPassed + 1;
-				}
-				break;
-			case 'b':
-				if (backgroundX >= 0) {
-					backgroundX = (0 - 1080);
-					numbackgroundPassed = numbackgroundPassed - 1;
-				}
-				break;
-		}
-	}
+int redrawGame() {
 	al_draw_bitmap(levelBackground[level], backgroundX, 0, 0);
 	if (backgroundX <= -1 && level != 1) {
 		al_draw_bitmap(levelBackground[level], backgroundX + 1080, 0, 0);
@@ -586,8 +597,18 @@ int redrawGame()
 	if (numbackgroundPassed >= 3) {
 		al_draw_bitmap(finish, backgroundX + 1080, 0, 0);
 		if (backgroundX <= -720) {
-			numbackgroundPassed = 0;
 			levelEnd(levelpassed);
+		}
+	}
+
+	if (level == 0) {
+		for (int x = 0; x < sizeof(levelOneMapHor) / sizeof(levelOneMapHor[0]); ++x) {
+			al_draw_filled_rectangle((levelOneMapHor[x] - levelProgress) + mouseX + 300, levelOneMapVer[x], (levelOneMapHor[x] - levelProgress) + (mouseX + 310), levelOneMapVer[x] + 61, al_map_rgb(156, 42, 42));
+		}
+	}
+	if (level == 2) {
+		for (int x = 0; x < sizeof(levelThreeMapHor) / sizeof(levelThreeMapHor[0]); ++x) {
+			al_draw_filled_rectangle((levelThreeMapHor[x] - levelProgress) + mouseX + 300, levelThreeMapVer[x], (levelThreeMapHor[x] - levelProgress) + (mouseX + 310), levelThreeMapVer[x] + 61, al_map_rgb(156, 42, 42));
 		}
 	}
 
@@ -597,25 +618,50 @@ int redrawGame()
 	}
 	else {
 		switch (mouseDir) {
+		case 'f':
+			if (!mouse1) {
+				al_draw_bitmap(smallmouse, mouseX, mouseY, 0);
+			}
+			else {
+				al_draw_bitmap(smallmouse1, mouseX, mouseY, 0);
+			}
+			break;
+		case 'b':
+			if (!mouse1) {
+				al_draw_bitmap(backsmallmouse, mouseX, mouseY, 0);
+			}
+			else {
+				al_draw_bitmap(backsmallmouse1, mouseX, mouseY, 0);
+			}
+			break;
+		}
+	}
+	al_flip_display();
+
+	return 0;
+}
+
+int graphics()
+{
+	if (level != 1) {
+		switch (mouseDir) {
 			case 'f':
-				if (!mouse1) {
-					al_draw_bitmap(smallmouse, mouseX, mouseY, 0);
-				}
-				else {
-					al_draw_bitmap(smallmouse1, mouseX, mouseY, 0);
+				if (backgroundX <= (0 - 1080)) {
+					backgroundX = 0;
+					numbackgroundPassed = numbackgroundPassed + 1;
 				}
 				break;
 			case 'b':
-				if (!mouse1) {
-					al_draw_bitmap(backsmallmouse, mouseX, mouseY, 0);
-				}
-				else {
-					al_draw_bitmap(backsmallmouse1, mouseX, mouseY, 0);
+				if (backgroundX >= 0) {
+					backgroundX = (0 - 1080);
+					numbackgroundPassed = numbackgroundPassed - 1;
 				}
 				break;
 		}
 	}
-	al_flip_display();
+	
+	redrawGame();
+
 	return 0;
 }
 
@@ -774,7 +820,7 @@ int play()
 					key_right = false;
 					break;
 				}
-				else if (mouseDir == 'b' && (levelProgress - 300) == levelOneMapHor[i] && targetMouseY == levelOneMapVer[i]) {
+				else if (mouseDir == 'b' && (levelProgress - 310) == levelOneMapHor[i] && targetMouseY == levelOneMapVer[i]) {
 					key_left = false;
 					break;
 				}
@@ -791,7 +837,24 @@ int play()
 					key_right = false;
 					break;
 				}
-				else if (mouseDir == 'b' && (levelProgress - 300) == levelTwoMapHor[i] && targetMouseY == levelTwoMapVer[i]) {
+				else if (mouseDir == 'b' && (levelProgress - 310) == levelTwoMapHor[i] && targetMouseY == levelTwoMapVer[i]) {
+					key_left = false;
+					break;
+				}
+				else {
+					key_right = true;
+					key_left = true;
+				}
+			}
+		}
+
+		else if (level == 2) {
+			for (int i = 0; i < (sizeof(levelThreeMapHor) / sizeof(levelThreeMapHor[0])); ++i) {
+				if (mouseDir == 'f' && levelProgress == levelThreeMapHor[i] && targetMouseY == levelThreeMapVer[i]) {
+					key_right = false;
+					break;
+				}
+				else if (mouseDir == 'b' && (levelProgress - 310) == levelThreeMapHor[i] && targetMouseY == levelThreeMapVer[i]) {
 					key_left = false;
 					break;
 				}
@@ -862,7 +925,7 @@ int play()
 				endProcess = true;
 				break;
 			case ALLEGRO_EVENT_TIMER:
-				redrawGame();
+				graphics();
 				break;
 			}
 		}
@@ -1134,7 +1197,7 @@ int main(int argc, char* argv[])
 	// Clear screen to black
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
-	
+	menu();
 	// Hound Productions
 	if (!endProcess) fade(houndproductions, 78, false, 156);
 	if (!endProcess) fade(houndproductions, 234, true, 312);
