@@ -9,6 +9,9 @@
 
 using namespace std;
 const float FPS = 60;
+char* userVal;
+size_t len;
+errno_t appdataErr;
 string user;
 ALLEGRO_BITMAP* icon = NULL;
 ALLEGRO_BITMAP* houndproductions = NULL;
@@ -215,7 +218,7 @@ int check_for_restart_gamemusic()
 
 bool checkLevel()
 {
-	fstream openfile(user+"level.txt", fstream::in);
+	fstream openfile(user+"\\level.txt", fstream::in);
 	int text;
 	openfile>>text;
 	openfile.close();
@@ -225,7 +228,7 @@ bool checkLevel()
 
 int changeLevel()
 {
-	fstream file(user+"level.txt", fstream::out);
+	fstream file(user+"\\level.txt", fstream::out);
 	file<<level;
 	file.close();
 
@@ -234,7 +237,7 @@ int changeLevel()
 
 bool checkSound()
 {
-	fstream openfile(user+"sound.txt", fstream::in);
+	fstream openfile(user+"\\sound.txt", fstream::in);
 	char text;
 	openfile >> text;
 	openfile.close();
@@ -260,11 +263,11 @@ bool checkUser()
 
 int changeSound()
 {
-	fstream openfile(user+"sound.txt", fstream::in);
+	fstream openfile(user+"\\sound.txt", fstream::in);
 	char text;
 	openfile >> text;
 	openfile.close();
-	fstream file(user+"sound.txt", fstream::out);
+	fstream file(user+"\\sound.txt", fstream::out);
 	if (text == '0') {
 		file << "1";
 		optionsx = false;
@@ -1049,6 +1052,13 @@ int menu()
 
 int main(int argc, char* argv[])
 {
+
+	appdataErr = _dupenv_s(&userVal, &len, "APPDATA");
+	if (appdataErr) return -1;
+	for (int i = 0; i < sizeof(userVal)/sizeof(userVal[0]); i++) {
+		user = user + userVal[i];
+	}
+	free(userVal);
 
 	checkUser();
 
