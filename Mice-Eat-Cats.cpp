@@ -254,10 +254,9 @@ bool checkSound()
 
 bool checkUser()
 {
-	fstream openfile("C:\\Users\\Public\\Documents\\user.txt", fstream::in);
-	openfile >> user;
-	openfile.close();
-	user = "C:\\Users\\" + user + "\\AppData\\Roaming\\";
+	for (int x = 0; userVal[x] != NULL; ++x) {
+		user += userVal[x];
+	}
 	return 0;
 }
 
@@ -361,6 +360,75 @@ int drawOptions()
 	return 0;
 }
 
+int options()
+{
+	bool inOptions = true;
+
+	bool mouse_button_1 = false;
+
+	if (!optionsx) {
+		fade(optionsybck, 0, false, 39);
+	}
+	else {
+		fade(optionsxbck, 0, false, 39);
+	}
+
+	while (inOptions) {
+		ALLEGRO_EVENT event;
+		ALLEGRO_TIMEOUT timeout;
+		ALLEGRO_MOUSE_STATE state;
+
+		check_for_restart_thememusic();
+
+		// Intalize timeout
+		al_init_timeout(&timeout, 0.06);
+
+		//get mouse state
+		al_get_mouse_state(&state);
+
+		bool get_event = al_wait_for_event_until(event_queue, &event, &timeout);
+
+		if (mouse_button_1 == false) {
+			if (state.buttons & 1) {
+				mouse_button_1 = true;
+			}
+		}
+		else {
+			if (!(state.buttons & 1)) {
+				if (state.x >= 90 && state.x <= 990 && state.y >= 256 && state.y <= 346) {
+					changeSound();
+				}
+				else {
+					inOptions = false;
+					if (!optionsx) {
+						fade(optionsybck, 0, true, 39);
+					}
+					else {
+						fade(optionsxbck, 0, true, 39);
+					}
+					return 0;
+				}
+				mouse_button_1 = false;
+			}
+		}
+
+		if (get_event) {
+			switch (event.type) {
+			case ALLEGRO_EVENT_DISPLAY_CLOSE:
+				inOptions = false;
+				endProcess = true;
+				break;
+			case ALLEGRO_EVENT_TIMER:
+				drawOptions();
+				break;
+
+			}
+		}
+	}
+
+	return 0;
+}
+
 int drawLevelEnd(ALLEGRO_BITMAP* bck)
 {
 	al_draw_bitmap(bck, 0, 0, 0);
@@ -430,8 +498,8 @@ int levelEnd(ALLEGRO_BITMAP* bck)
 		}
 		else {
 			if (!(state.buttons & 1)) {
-				if (state.x >= 427 && state.x <= 653) {
-					if (state.y >= 165 && state.y <= 256) {
+				if (state.x >= 440 && state.x <= 640) {
+					if (state.y >= 125 && state.y <= 225) {
 						inLevelEnd = false;
 						++level;
 						fade(bck, 39, true, 117);
@@ -439,15 +507,22 @@ int levelEnd(ALLEGRO_BITMAP* bck)
 						changeLevel();
 						return 0;
 					}
-					else if (state.y >= 300 && state.y <= 391) {
+					else if (state.y >= 225 && state.y <= 325) {
 						inLevelEnd = false;
 						fade(bck, 39, true, 117);
 						fade(levelBackground[level], 39, false, 117);
 						return 0;
 					}
-					else if (state.y >= 435 && state.y <= 526) {
+					else if (state.y >= 325 && state.y <= 425) {
+						fade(bck, 0, true, 39);
+						options();
+						fade(bck, 0, false, 39);
+					}
+					else if (state.y >= 425 && state.y <= 525) {
 						inGame = false;
 						inLevelEnd = false;
+						++level;
+						changeLevel();
 						fade(bck, 39, true, 117);
 						fade(menubck, 39, false, 117);
 						return 0;
@@ -873,78 +948,6 @@ int credits()
 	return 0;
 }
 
-int options()
-{
-	bool inOptions = true;
-
-	bool mouse_button_1 = false;
-
-	fade(menubck, 0, true, 39);
-
-	if (!optionsx) {
-		fade(optionsybck, 0, false, 39);
-	}
-	else {
-		fade(optionsxbck, 0, false, 39);
-	}
-
-	while (inOptions) {
-		ALLEGRO_EVENT event;
-		ALLEGRO_TIMEOUT timeout;
-		ALLEGRO_MOUSE_STATE state;
-
-		check_for_restart_thememusic();
-
-		// Intalize timeout
-		al_init_timeout(&timeout, 0.06);
-
-		//get mouse state
-		al_get_mouse_state(&state);
-
-		bool get_event = al_wait_for_event_until(event_queue, &event, &timeout);
-
-		if (mouse_button_1 == false) {
-			if (state.buttons & 1) {
-				mouse_button_1 = true;
-			}
-		}
-		else {
-			if (!(state.buttons & 1)) {
-				if (state.x >= 90 && state.x <= 990 && state.y >= 256 && state.y <= 346) {
-					changeSound();
-				}
-				else {
-					inOptions = false;
-					if (!optionsx) {
-						fade(optionsybck, 0, true, 39);
-					}
-					else {
-						fade(optionsxbck, 0, true, 39);
-					}
-					fade(menubck, 0, false, 39);
-					return 0;
-				}
-				mouse_button_1 = false;
-			}
-		}
-
-		if (get_event) {
-			switch (event.type) {
-			case ALLEGRO_EVENT_DISPLAY_CLOSE:
-				inOptions = false;
-				endProcess = true;
-				break;
-			case ALLEGRO_EVENT_TIMER:
-				drawOptions();
-				break;
-
-			}
-		}
-	}
-
-	return 0;
-}
-
 int checkSelection()
 {
 	switch (selection) {
@@ -952,7 +955,9 @@ int checkSelection()
 		play();
 		break;
 	case 'o':
+		fade(menubck, 0, true, 39);
 		options();
+		fade(menubck, 0, false, 39);
 		break;
 	case 'c':
 		credits();
@@ -1055,12 +1060,8 @@ int main(int argc, char* argv[])
 
 	appdataErr = _dupenv_s(&userVal, &len, "APPDATA");
 	if (appdataErr) return -1;
-	for (int i = 0; i < sizeof(userVal)/sizeof(userVal[0]); i++) {
-		user = user + userVal[i];
-	}
-	free(userVal);
-
 	checkUser();
+	free(userVal);
 
 	checkSound();
 
