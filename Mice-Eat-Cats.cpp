@@ -775,7 +775,7 @@ bool checkEsc(ALLEGRO_KEYBOARD_STATE state)
 bool checkFood(ALLEGRO_KEYBOARD_STATE state)
 {
 	if (waitingFoot == true) {
-		if (al_key_down(&state, ALLEGRO_KEY_F) && al_key_down(&state, ALLEGRO_KEY_O) && al_key_down(&state, ALLEGRO_KEY_T)) {
+		if (al_key_down(&state, ALLEGRO_KEY_T) && al_key_down(&state, ALLEGRO_KEY_O) && al_key_down(&state, ALLEGRO_KEY_P) && al_key_down(&state, ALLEGRO_KEY_I)) {
 			waitingFoot = false;
 			return true;
 		}
