@@ -52,30 +52,30 @@ ALLEGRO_TIMER* timer = NULL;
 
 // Level One Map
 int levelOneMapHor[] = {
-	100, 400, -610, -290
+	0
 };
 
 int levelOneMapVer[] = {
-	51, 211, 51, 51
+	0
 };
 
 int levelOneMapHorHor[] = {
-	-600, -600
+	0
 };
 
 int levelOneMapVerHor[] = {
-	41, 112
+	0
 };
 
 int levelOneMapHorHorWidth[] = {
-	310, 310
+	0
 };
 
 // Level Two Map
 
 int levelTwoMapHor[] = {
-	480, 480, 480, 480,
-	-600, -600, -600, -600
+	1080, 1080, 1080, 1080,
+	0, 0, 0, 0
 };
 
 int levelTwoMapVer[] = {
@@ -85,11 +85,11 @@ int levelTwoMapVer[] = {
 
 // Level Three Map
 int levelThreeMapHor[] = {
-	-300, -300, -300, -300
+	0-300, -300, -300, -300
 };
 
 int levelThreeMapVer[] = {
-	51, 211, 371, 531
+	0
 };
 
 int levelThreeMapHorHor[] = {
@@ -107,7 +107,7 @@ int levelThreeMapHorHorWidth[] = {
 int level = 0;
 int numSamples = 1;
 int mouseFrames = 0;
-int levelProgress = 0;
+int levelProgress = 600;
 int numbackgroundPassed = 0;
 bool mouse1 = false;
 float mouseX = -550;
@@ -525,7 +525,7 @@ int levelEnd(ALLEGRO_BITMAP* bck)
 
 	bool mouse_button_1 = false;
 
-	levelProgress = 0;
+	levelProgress = 600;
 	backgroundX = 0;
 	mouseFrames = 0;
 	mouse1 = false;
@@ -822,11 +822,11 @@ int play()
 			return 0;
 		}
 	}
-	fade(levelBackground[level], 0, false, 39);
+	fade(levelBackground[level], 0, false, 39, true);
 
 	mouseDir = 'f';
 
-	levelProgress = 0;
+	levelProgress = 600;
 	backgroundX = 0;
 	mouseFrames = 0;
 	mouse1 = false;
