@@ -14,6 +14,8 @@ size_t len;
 errno_t appdataErr;
 string user;
 ALLEGRO_BITMAP* icon = NULL;
+ALLEGRO_BITMAP* pausebck = NULL;
+ALLEGRO_BITMAP* pausebtn = NULL;
 ALLEGRO_BITMAP* houndproductions = NULL;
 ALLEGRO_BITMAP* itopimangianogatti = NULL;
 ALLEGRO_BITMAP* levelBackground[2];
@@ -224,6 +226,7 @@ int fade(ALLEGRO_BITMAP* image, int framesUpTo312, bool trueForOutFalseForIn, in
 							break;
 						}
 					}
+					al_draw_bitmap(pausebtn, 1005, 25, 0);
 					al_draw_filled_rectangle(0, 0, 1080, 640, al_map_rgba_f(0, 0, 0, fadeTransparency));
 					al_flip_display();
 				}
@@ -340,6 +343,7 @@ int changeSound()
 int closeDisplay()
 {
 	al_destroy_display(display);
+	al_destroy_bitmap(pausebtn);
 	al_destroy_bitmap(icon);
 	al_destroy_bitmap(creditsbck1);
 	al_destroy_bitmap(levelpassed);
@@ -609,6 +613,88 @@ int levelEnd(ALLEGRO_BITMAP* bck)
 	return 0;
 }
 
+int pause()
+{
+
+	fade(levelBackground[level], 39, true, 117, true);
+	fade(pausebck, 39, false, 117);
+
+	bool paused = true;
+
+	bool mouse_button_1 = false;
+
+	while (paused) {
+		ALLEGRO_EVENT event;
+		ALLEGRO_TIMEOUT timeout;
+		ALLEGRO_MOUSE_STATE state;
+
+		// Intalize timeout
+		al_init_timeout(&timeout, 0.06);
+
+		//get mouse state
+		al_get_mouse_state(&state);
+
+		bool get_event = al_wait_for_event_until(event_queue, &event, &timeout);
+
+		if (mouse_button_1 == false) {
+			if (state.buttons & 1) {
+				mouse_button_1 = true;
+			}
+		}
+		else {
+			if (!(state.buttons & 1)) {
+				if (state.x >= 440 && state.x <= 640) {
+					if (state.y >= 125 && state.y <= 225) {
+						paused = false;
+						fade(pausebck, 39, true, 117);
+						fade(levelBackground[level], 39, false, 117);
+						return 0;
+					}
+					else if (state.y >= 225 && state.y <= 325) {
+						paused = false;
+						fade(pausebck, 39, true, 117);
+						fade(levelBackground[level], 39, false, 117);
+						numbackgroundPassed = 0;
+
+						return 0;
+					}
+					else if (state.y >= 325 && state.y <= 425) {
+						fade(pausebck, 0, true, 39);
+						options();
+						fade(pausebck, 0, false, 39);
+					}
+					else if (state.y >= 425 && state.y <= 525) {
+						inGame = false;
+						paused = false;
+						++level;
+						changeLevel();
+						fade(pausebck, 39, true, 117);
+						fade(menubck, 39, false, 117);
+						numbackgroundPassed = 0;
+						return 0;
+					}
+				}
+				mouse_button_1 = false;
+			}
+		}
+
+		if (get_event) {
+			switch (event.type) {
+			case ALLEGRO_EVENT_DISPLAY_CLOSE:
+				paused = false;
+				endProcess = true;
+				break;
+			case ALLEGRO_EVENT_TIMER:
+				drawLevelEnd(pausebck);
+				break;
+
+			}
+		}
+	}
+
+	return 0;
+}
+
 int redrawGame() {
 	al_draw_bitmap(levelBackground[level], backgroundX, 0, 0);
 	if (backgroundX <= -1 && level != 1) {
@@ -674,6 +760,7 @@ int redrawGame() {
 			break;
 		}
 	}
+	al_draw_bitmap(pausebtn, 1005, 25, 0);
 	al_flip_display();
 
 	return 0;
@@ -840,8 +927,27 @@ int play()
 		ALLEGRO_KEYBOARD_STATE state;
 		ALLEGRO_EVENT event;
 		ALLEGRO_TIMEOUT timeout;
+		ALLEGRO_MOUSE_STATE mState;
 
 		check_for_restart_gamemusic();
+
+		al_get_mouse_state(&mState);
+
+		bool get_event = al_wait_for_event_until(event_queue, &event, &timeout);
+
+		if (mouse_button_1 == false) {
+			if (mState.buttons & 1) {
+				mouse_button_1 = true;
+			}
+		}
+		else {
+			if (!(mState.buttons & 1)) {
+				if (mState.x >= 1005 && mState.x <= 1055 && mState.y >= 25 && mState.y <= 75) {
+					pause();
+				}
+				mouse_button_1 = false;
+			}
+		}
 
 		bool frameUp = false;
 
@@ -849,8 +955,6 @@ int play()
 
 		// Intalize timeout
 		al_init_timeout(&timeout, 0.06);
-
-		bool get_event = al_wait_for_event_until(event_queue, &event, &timeout);
 
 		if (level == 0) {
 			for (int i = 0; i < (sizeof(levelOneMapHor) / sizeof(levelOneMapHor[0])); ++i) {
@@ -1218,6 +1322,8 @@ int main(int argc, char* argv[])
 
 	// Load images
 	finish = al_load_bitmap("finish.png");
+	pausebck = al_load_bitmap("pausebck.png");
+	pausebtn = al_load_bitmap("pause.png");
 	icon = al_load_bitmap("icon.png");
 	levelpassed = al_load_bitmap("levelpassed.png");
 	houseentryway = al_load_bitmap("houseentryway.png");
