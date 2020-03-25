@@ -787,7 +787,7 @@ int play()
 {
 	fade(menubck, 0, true, 39);
 	al_stop_sample_instance(backgroundMusicInstance);
-	if (level == 10) {
+	if (level == 0) {
 
 		if (!endProcess) fade(houseentryway, 117, false, 117);
 		if (!optionsx && !endProcess) al_play_sample_instance(horrorSceneInstance);
@@ -1249,7 +1249,7 @@ int main(int argc, char* argv[])
 	// Clear screen to black
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
-	menu();
+
 	// Hound Productions
 	if (!endProcess) fade(houndproductions, 78, false, 156);
 	if (!endProcess) fade(houndproductions, 234, true, 312);
