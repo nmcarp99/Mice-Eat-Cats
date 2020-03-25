@@ -163,7 +163,8 @@ int fade(ALLEGRO_BITMAP* image, int framesUpTo312, bool trueForOutFalseForIn, in
 				break;
 			case ALLEGRO_EVENT_TIMER:
 				if (levelFade) {
-					al_draw_bitmap(levelBackground[level], backgroundX, 0, 0);
+					ALLEGRO_BITMAP* currentBackground = levelBackground[level];
+					al_draw_bitmap(currentBackground, backgroundX, 0, 0);
 					if (backgroundX <= -1 && level != 1) {
 						al_draw_bitmap(levelBackground[level], backgroundX + 1080, 0, 0);
 					}
