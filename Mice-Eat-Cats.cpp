@@ -52,11 +52,23 @@ ALLEGRO_TIMER* timer = NULL;
 
 // Level One Map
 int levelOneMapHor[] = {
-	100, 400
+	100, 400, -610, -290
 };
 
 int levelOneMapVer[] = {
-	51, 211
+	51, 211, 51, 51
+};
+
+int levelOneMapHorHor[] = {
+	-600, -600
+};
+
+int levelOneMapVerHor[] = {
+	41, 112
+};
+
+int levelOneMapHorHorWidth[] = {
+	310, 310
 };
 
 // Level Two Map
@@ -80,6 +92,18 @@ int levelThreeMapVer[] = {
 	51, 211, 371, 531
 };
 
+int levelThreeMapHorHor[] = {
+	0
+};
+
+int levelThreeMapVerHor[] = {
+	0
+};
+
+int levelThreeMapHorHorWidth[] = {
+	0
+};
+
 int level = 0;
 int numSamples = 1;
 int mouseFrames = 0;
@@ -97,6 +121,8 @@ bool endProcess = false;
 bool mouse_button_1 = false;
 bool key_left = true;
 bool key_right = true;
+bool key_up_allowed = true;
+bool key_down_allowed = true;
 bool key_up = false;
 bool key_down = false;
 bool key_esc = false;
@@ -161,10 +187,16 @@ int fade(ALLEGRO_BITMAP* image, int framesUpTo312, bool trueForOutFalseForIn, in
 						for (int x = 0; x < sizeof(levelOneMapHor) / sizeof(levelOneMapHor[0]); ++x) {
 							al_draw_filled_rectangle((levelOneMapHor[x] - levelProgress) + mouseX + 300, levelOneMapVer[x], (levelOneMapHor[x] - levelProgress) + (mouseX + 310), levelOneMapVer[x] + 61, al_map_rgb(156, 42, 42));
 						}
+						for (int x = 0; x < sizeof(levelOneMapHorHor) / sizeof(levelOneMapHorHor[0]); ++x) {
+							al_draw_filled_rectangle((levelOneMapHorHor[x] - levelProgress) + mouseX + 300, levelOneMapVerHor[x], (levelOneMapHorHor[x] - levelProgress) + (mouseX + 300 + levelOneMapHorHorWidth[x]), levelOneMapVerHor[x] + 10, al_map_rgb(156, 42, 42));
+						}
 					}
 					if (level == 2) {
 						for (int x = 0; x < sizeof(levelThreeMapHor) / sizeof(levelThreeMapHor[0]); ++x) {
 							al_draw_filled_rectangle((levelThreeMapHor[x] - levelProgress) + mouseX + 300, levelThreeMapVer[x], (levelThreeMapHor[x] - levelProgress) + (mouseX + 310), levelThreeMapVer[x] + 61, al_map_rgb(156, 42, 42));
+						}
+						for (int x = 0; x < sizeof(levelThreeMapHorHor) / sizeof(levelThreeMapHorHor[0]); ++x) {
+							al_draw_filled_rectangle((levelThreeMapHorHor[x] - levelProgress) + mouseX + 300, levelThreeMapVerHor[x], (levelThreeMapHorHor[x] - levelProgress) + (mouseX + 300 + levelThreeMapHorHorWidth[x]), levelThreeMapVerHor[x] + 10, al_map_rgb(156, 42, 42));
 						}
 					}
 
@@ -605,10 +637,16 @@ int redrawGame() {
 		for (int x = 0; x < sizeof(levelOneMapHor) / sizeof(levelOneMapHor[0]); ++x) {
 			al_draw_filled_rectangle((levelOneMapHor[x] - levelProgress) + mouseX + 300, levelOneMapVer[x], (levelOneMapHor[x] - levelProgress) + (mouseX + 310), levelOneMapVer[x] + 61, al_map_rgb(156, 42, 42));
 		}
+		for (int x = 0; x < sizeof(levelOneMapHorHor) / sizeof(levelOneMapHorHor[0]); ++x) {
+			al_draw_filled_rectangle((levelOneMapHorHor[x] - levelProgress) + mouseX + 300, levelOneMapVerHor[x], (levelOneMapHorHor[x] - levelProgress) + (mouseX + 300 + levelOneMapHorHorWidth[x]), levelOneMapVerHor[x] + 10, al_map_rgb(156, 42, 42));
+		}
 	}
 	if (level == 2) {
 		for (int x = 0; x < sizeof(levelThreeMapHor) / sizeof(levelThreeMapHor[0]); ++x) {
 			al_draw_filled_rectangle((levelThreeMapHor[x] - levelProgress) + mouseX + 300, levelThreeMapVer[x], (levelThreeMapHor[x] - levelProgress) + (mouseX + 310), levelThreeMapVer[x] + 61, al_map_rgb(156, 42, 42));
+		}
+		for (int x = 0; x < sizeof(levelThreeMapHorHor) / sizeof(levelThreeMapHorHor[0]); ++x) {
+			al_draw_filled_rectangle((levelThreeMapHorHor[x] - levelProgress) + mouseX + 300, levelThreeMapVerHor[x], (levelThreeMapHorHor[x] - levelProgress) + (mouseX + 300 + levelThreeMapHorHorWidth[x]), levelThreeMapVerHor[x] + 10, al_map_rgb(156, 42, 42));
 		}
 	}
 
@@ -749,7 +787,7 @@ int play()
 {
 	fade(menubck, 0, true, 39);
 	al_stop_sample_instance(backgroundMusicInstance);
-	if (level == 0) {
+	if (level == 10) {
 
 		if (!endProcess) fade(houseentryway, 117, false, 117);
 		if (!optionsx && !endProcess) al_play_sample_instance(horrorSceneInstance);
@@ -829,6 +867,20 @@ int play()
 					key_left = true;
 				}
 			}
+			for (int i = 0; i < (sizeof(levelOneMapHorHor) / sizeof(levelOneMapHorHor[0])); ++i) {
+				if (levelProgress > levelOneMapHorHor[i] && levelProgress < levelOneMapHorHor[i] + 600) {
+					if (levelOneMapVerHor[i] == mouseY - 10) {
+						key_up_allowed = false;
+					}
+					else if (levelOneMapVerHor[i] == mouseY + 61) {
+						key_down_allowed = false;
+					}
+				}
+				else {
+					key_up_allowed = true;
+					key_down_allowed = true;
+				}
+			}
 		}
 
 		else if (level == 1) {
@@ -898,10 +950,10 @@ int play()
 				frameUp = true;
 			}
 		}
-		if (checkUp(state)) {
+		if (checkUp(state) && key_up_allowed) {
 			targetMouseY = targetMouseY - 160;
 		}
-		if (checkDown(state)) {
+		if (checkDown(state) && key_down_allowed) {
 			targetMouseY = targetMouseY + 160;
 		}
 		if (checkRight(state) && key_right) {
