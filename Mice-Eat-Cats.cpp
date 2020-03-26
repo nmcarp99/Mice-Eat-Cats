@@ -87,7 +87,7 @@ int levelTwoMapVer[] = {
 
 // Level Three Map
 int levelThreeMapHor[] = {
-	0-300, -300, -300, -300
+	0 - 300, -300, -300, -300
 };
 
 int levelThreeMapVer[] = {
@@ -109,7 +109,7 @@ int levelThreeMapHorHorWidth[] = {
 int level = 0;
 int numSamples = 1;
 int mouseFrames = 0;
-int levelProgress = 600;
+int levelProgress = 300;
 int numbackgroundPassed = 0;
 bool mouse1 = false;
 float mouseX = -550;
@@ -276,9 +276,9 @@ int check_for_restart_gamemusic()
 
 bool checkLevel()
 {
-	fstream openfile(user+"\\level.txt", fstream::in);
+	fstream openfile(user + "\\level.txt", fstream::in);
 	int text;
-	openfile>>text;
+	openfile >> text;
 	openfile.close();
 	level = text;
 	return 0;
@@ -286,8 +286,8 @@ bool checkLevel()
 
 int changeLevel()
 {
-	fstream file(user+"\\level.txt", fstream::out);
-	file<<level;
+	fstream file(user + "\\level.txt", fstream::out);
+	file << level;
 	file.close();
 
 	return 0;
@@ -295,7 +295,7 @@ int changeLevel()
 
 bool checkSound()
 {
-	fstream openfile(user+"\\sound.txt", fstream::in);
+	fstream openfile(user + "\\sound.txt", fstream::in);
 	char text;
 	openfile >> text;
 	openfile.close();
@@ -320,11 +320,11 @@ bool checkUser()
 
 int changeSound()
 {
-	fstream openfile(user+"\\sound.txt", fstream::in);
+	fstream openfile(user + "\\sound.txt", fstream::in);
 	char text;
 	openfile >> text;
 	openfile.close();
-	fstream file(user+"\\sound.txt", fstream::out);
+	fstream file(user + "\\sound.txt", fstream::out);
 	if (text == '0') {
 		file << "1";
 		optionsx = false;
@@ -522,14 +522,14 @@ int redrawMenu()
 int levelEnd(ALLEGRO_BITMAP* bck)
 {
 
-	fade(levelBackground[level], 39, true, 117, true);
+	fade(levelBackground[level], 0, true, 39, true);
 	fade(bck, 39, false, 117);
 
 	bool inLevelEnd = true;
 
 	bool mouse_button_1 = false;
 
-	levelProgress = 600;
+	levelProgress = 300;
 	backgroundX = 0;
 	mouseFrames = 0;
 	mouse1 = false;
@@ -561,7 +561,7 @@ int levelEnd(ALLEGRO_BITMAP* bck)
 					if (state.y >= 125 && state.y <= 225) {
 						inLevelEnd = false;
 						++level;
-						fade(bck, 39, true, 117);
+						fade(bck, 0, true, 39);
 						fade(levelBackground[level], 39, false, 117);
 						changeLevel();
 						numbackgroundPassed = 0;
@@ -570,7 +570,7 @@ int levelEnd(ALLEGRO_BITMAP* bck)
 					}
 					else if (state.y >= 225 && state.y <= 325) {
 						inLevelEnd = false;
-						fade(bck, 39, true, 117);
+						fade(bck, 0, true, 39);
 						fade(levelBackground[level], 39, false, 117);
 						numbackgroundPassed = 0;
 
@@ -586,7 +586,7 @@ int levelEnd(ALLEGRO_BITMAP* bck)
 						inLevelEnd = false;
 						++level;
 						changeLevel();
-						fade(bck, 39, true, 117);
+						fade(bck, 0, true, 39);
 						fade(menubck, 39, false, 117);
 						numbackgroundPassed = 0;
 						return 0;
@@ -616,7 +616,7 @@ int levelEnd(ALLEGRO_BITMAP* bck)
 int pause()
 {
 
-	fade(levelBackground[level], 39, true, 117, true);
+	fade(levelBackground[level], 0, true, 39, true);
 	fade(pausebck, 39, false, 117);
 
 	bool paused = true;
@@ -646,16 +646,23 @@ int pause()
 				if (state.x >= 440 && state.x <= 640) {
 					if (state.y >= 125 && state.y <= 225) {
 						paused = false;
-						fade(pausebck, 39, true, 117);
+						fade(pausebck, 0, true, 39);
 						fade(levelBackground[level], 39, false, 117);
 						return 0;
 					}
 					else if (state.y >= 225 && state.y <= 325) {
 						paused = false;
-						fade(pausebck, 39, true, 117);
+						fade(pausebck, 0, true, 39);
 						fade(levelBackground[level], 39, false, 117);
 						numbackgroundPassed = 0;
-
+						mouseDir = 'f';
+						levelProgress = 300;
+						backgroundX = 0;
+						mouseFrames = 0;
+						mouse1 = false;
+						mouseX = 300;
+						targetMouseY = 51;
+						mouseY = 51;
 						return 0;
 					}
 					else if (state.y >= 325 && state.y <= 425) {
@@ -666,11 +673,8 @@ int pause()
 					else if (state.y >= 425 && state.y <= 525) {
 						inGame = false;
 						paused = false;
-						++level;
-						changeLevel();
-						fade(pausebck, 39, true, 117);
+						fade(pausebck, 0, true, 39);
 						fade(menubck, 39, false, 117);
-						numbackgroundPassed = 0;
 						return 0;
 					}
 				}
@@ -681,8 +685,10 @@ int pause()
 		if (get_event) {
 			switch (event.type) {
 			case ALLEGRO_EVENT_DISPLAY_CLOSE:
+				inGame = false;
 				paused = false;
 				endProcess = true;
+				fade(pausebck, 0, true, 39);
 				break;
 			case ALLEGRO_EVENT_TIMER:
 				drawLevelEnd(pausebck);
@@ -770,21 +776,21 @@ int graphics()
 {
 	if (level != 1) {
 		switch (mouseDir) {
-			case 'f':
-				if (backgroundX <= (0 - 1080)) {
-					backgroundX = 0;
-					numbackgroundPassed = numbackgroundPassed + 1;
-				}
-				break;
-			case 'b':
-				if (backgroundX >= 0) {
-					backgroundX = (0 - 1080);
-					numbackgroundPassed = numbackgroundPassed - 1;
-				}
-				break;
+		case 'f':
+			if (backgroundX <= (0 - 1080)) {
+				backgroundX = 0;
+				numbackgroundPassed = numbackgroundPassed + 1;
+			}
+			break;
+		case 'b':
+			if (backgroundX >= 0) {
+				backgroundX = (0 - 1080);
+				numbackgroundPassed = numbackgroundPassed - 1;
+			}
+			break;
 		}
 	}
-	
+
 	redrawGame();
 
 	return 0;
@@ -874,7 +880,7 @@ int play()
 {
 	fade(menubck, 0, true, 39);
 	al_stop_sample_instance(backgroundMusicInstance);
-	if (level == 0) {
+	if (level == 10) {
 
 		if (!endProcess) fade(houseentryway, 117, false, 117);
 		if (!optionsx && !endProcess) al_play_sample_instance(horrorSceneInstance);
@@ -913,7 +919,7 @@ int play()
 
 	mouseDir = 'f';
 
-	levelProgress = 600;
+	levelProgress = 300;
 	backgroundX = 0;
 	mouseFrames = 0;
 	mouse1 = false;
@@ -981,10 +987,39 @@ int play()
 					}
 				}
 				else {
-					key_up_allowed = true;
+					key_up_allowed = false;
 					key_down_allowed = true;
 				}
 			}
+			string s = to_string(levelProgress); const char* chr = s.c_str(); al_set_window_title(display, chr);
+			// middle ladders
+			
+				// bottom
+			if (mouseY == 531) {
+				if (abs(levelProgress) >= 20 && abs(levelProgress) <= 70 && mouseDir == 'f' && levelProgress < 0) {
+					key_up_allowed = true;
+				}
+				else if (abs(levelProgress) >= 80 && abs(levelProgress) <= 140 && mouseDir == 'b' && levelProgress < 0) {
+					key_up_allowed = true;
+				}
+
+				// right ladders
+				if (abs(levelProgress) >= 1080 && levelProgress % 1080 + 1080 >= 1010 && levelProgress % 1080 + 1080 <= 1080 && mouseDir == 'f' && levelProgress > 0 || levelProgress % 1080 >= 1010 && levelProgress % 1080 <= 1080 && mouseDir == 'f' && levelProgress > 0) {
+					key_up_allowed = true;
+				}
+				else if (abs(levelProgress) >= 1080 && levelProgress % 1080 + 1080 >= 1150 && levelProgress % 1080 + 1080 <= 1220 && mouseDir == 'b' && levelProgress > 0 || levelProgress % 1080 >= 1150 && levelProgress % 1080 <= 1220 && mouseDir == 'b' && levelProgress > 0) {
+					key_up_allowed = true;
+				}
+			
+				// left ladders
+				if (abs(levelProgress) >= 1080 && abs(levelProgress) % 1080 + 1080 >= 1080 && abs(levelProgress) % 1080 + 1080 <= 1160 && mouseDir == 'f' && levelProgress < 0 || abs(levelProgress) % 1080 >= 1080 && abs(levelProgress) % 1080 <= 1160 && mouseDir == 'f' && levelProgress < 0) {
+					key_up_allowed = true;
+				}
+				else if (abs(levelProgress) >= 1080 && abs(levelProgress) % 1080 + 1080 >= 940 && abs(levelProgress) % 1080 + 1080 <= 1020 && mouseDir == 'b' && levelProgress < 0 || abs(levelProgress) % 1080 >= 940 && abs(levelProgress) % 1080 <= 1020 && mouseDir == 'b' && levelProgress < 0) {
+					key_up_allowed = true;
+				}
+			}
+
 		}
 
 		else if (level == 1) {
@@ -1355,7 +1390,7 @@ int main(int argc, char* argv[])
 	// Clear screen to black
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
-
+	menu();
 	// Hound Productions
 	if (!endProcess) fade(houndproductions, 78, false, 156);
 	if (!endProcess) fade(houndproductions, 234, true, 312);
