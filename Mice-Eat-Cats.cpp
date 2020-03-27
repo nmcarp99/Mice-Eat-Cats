@@ -965,6 +965,35 @@ int play()
 		// Intalize timeout
 		al_init_timeout(&timeout, 0.06);
 
+		string s = to_string(levelProgress); const char* chr = s.c_str(); al_set_window_title(display, chr);
+		// middle ladders
+
+			// bottom
+		if (mouseY == 531) {
+			if (abs(levelProgress) >= 20 && abs(levelProgress) <= 70 && mouseDir == 'f' && levelProgress < 0) {
+				key_up_allowed = true;
+			}
+			else if (abs(levelProgress) >= 80 && abs(levelProgress) <= 140 && mouseDir == 'b' && levelProgress > 0) {
+				key_up_allowed = true;
+			}
+
+			// right ladders
+			if (abs(levelProgress) >= 1080 && levelProgress % 1080 + 1080 >= 1010 && levelProgress % 1080 + 1080 <= 1080 && mouseDir == 'f' && levelProgress > 0 || levelProgress % 1080 >= 1010 && levelProgress % 1080 <= 1080 && mouseDir == 'f' && levelProgress > 0) {
+				key_up_allowed = true;
+			}
+			else if (abs(levelProgress) >= 1080 && levelProgress % 1080 + 1080 >= 1150 && levelProgress % 1080 + 1080 <= 1220 && mouseDir == 'b' && levelProgress > 0 || levelProgress % 1080 >= 1150 && levelProgress % 1080 <= 1220 && mouseDir == 'b' && levelProgress > 0) {
+				key_up_allowed = true;
+			}
+
+			// left ladders
+			if (abs(levelProgress) >= 1080 && abs(levelProgress) % 1080 + 1080 >= 1080 && abs(levelProgress) % 1080 + 1080 <= 1160 && mouseDir == 'f' && levelProgress < 0 || abs(levelProgress) % 1080 >= 1080 && abs(levelProgress) % 1080 <= 1160 && mouseDir == 'f' && levelProgress < 0) {
+				key_up_allowed = true;
+			}
+			else if (abs(levelProgress) >= 1080 && abs(levelProgress) % 1080 + 1080 >= 940 && abs(levelProgress) % 1080 + 1080 <= 1020 && mouseDir == 'b' && levelProgress < 0 || abs(levelProgress) % 1080 >= 940 && abs(levelProgress) % 1080 <= 1020 && mouseDir == 'b' && levelProgress < 0) {
+				key_up_allowed = true;
+			}
+		}
+
 		if (level == 0) {
 			for (int i = 0; i < (sizeof(levelOneMapHor) / sizeof(levelOneMapHor[0])); ++i) {
 				if (mouseDir == 'f' && levelProgress == levelOneMapHor[i] && targetMouseY == levelOneMapVer[i]) {
@@ -992,34 +1021,6 @@ int play()
 				else {
 					key_up_allowed = false;
 					key_down_allowed = true;
-				}
-			}
-			string s = to_string(levelProgress); const char* chr = s.c_str(); al_set_window_title(display, chr);
-			// middle ladders
-			
-				// bottom
-			if (mouseY == 531) {
-				if (abs(levelProgress) >= 20 && abs(levelProgress) <= 70 && mouseDir == 'f' && levelProgress < 0) {
-					key_up_allowed = true;
-				}
-				else if (abs(levelProgress) >= 80 && abs(levelProgress) <= 140 && mouseDir == 'b' && levelProgress > 0) {
-					key_up_allowed = true;
-				}
-
-				// right ladders
-				if (abs(levelProgress) >= 1080 && levelProgress % 1080 + 1080 >= 1010 && levelProgress % 1080 + 1080 <= 1080 && mouseDir == 'f' && levelProgress > 0 || levelProgress % 1080 >= 1010 && levelProgress % 1080 <= 1080 && mouseDir == 'f' && levelProgress > 0) {
-					key_up_allowed = true;
-				}
-				else if (abs(levelProgress) >= 1080 && levelProgress % 1080 + 1080 >= 1150 && levelProgress % 1080 + 1080 <= 1220 && mouseDir == 'b' && levelProgress > 0 || levelProgress % 1080 >= 1150 && levelProgress % 1080 <= 1220 && mouseDir == 'b' && levelProgress > 0) {
-					key_up_allowed = true;
-				}
-			
-				// left ladders
-				if (abs(levelProgress) >= 1080 && abs(levelProgress) % 1080 + 1080 >= 1080 && abs(levelProgress) % 1080 + 1080 <= 1160 && mouseDir == 'f' && levelProgress < 0 || abs(levelProgress) % 1080 >= 1080 && abs(levelProgress) % 1080 <= 1160 && mouseDir == 'f' && levelProgress < 0) {
-					key_up_allowed = true;
-				}
-				else if (abs(levelProgress) >= 1080 && abs(levelProgress) % 1080 + 1080 >= 940 && abs(levelProgress) % 1080 + 1080 <= 1020 && mouseDir == 'b' && levelProgress < 0 || abs(levelProgress) % 1080 >= 940 && abs(levelProgress) % 1080 <= 1020 && mouseDir == 'b' && levelProgress < 0) {
-					key_up_allowed = true;
 				}
 			}
 
