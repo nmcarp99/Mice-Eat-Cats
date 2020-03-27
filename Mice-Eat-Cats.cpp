@@ -950,6 +950,9 @@ int play()
 			if (!(mState.buttons & 1)) {
 				if (mState.x >= 1005 && mState.x <= 1055 && mState.y >= 25 && mState.y <= 75) {
 					pause();
+					if (inGame == false) {
+						return 0;
+					}
 				}
 				mouse_button_1 = false;
 			}
@@ -999,7 +1002,7 @@ int play()
 				if (abs(levelProgress) >= 20 && abs(levelProgress) <= 70 && mouseDir == 'f' && levelProgress < 0) {
 					key_up_allowed = true;
 				}
-				else if (abs(levelProgress) >= 80 && abs(levelProgress) <= 140 && mouseDir == 'b' && levelProgress < 0) {
+				else if (abs(levelProgress) >= 80 && abs(levelProgress) <= 140 && mouseDir == 'b' && levelProgress > 0) {
 					key_up_allowed = true;
 				}
 
