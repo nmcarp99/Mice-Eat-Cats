@@ -535,7 +535,7 @@ int levelEnd(ALLEGRO_BITMAP* bck)
 {
 
 	fade(levelBackground[level], 0, true, 39, true);
-	fade(bck, 39, false, 117);
+	fade(bck, 0, false, 117);
 
 	bool inLevelEnd = true;
 
@@ -574,7 +574,7 @@ int levelEnd(ALLEGRO_BITMAP* bck)
 						inLevelEnd = false;
 						++level;
 						fade(bck, 0, true, 39);
-						fade(levelBackground[level], 39, false, 117);
+						fade(levelBackground[level], 0, false, 117);
 						changeLevel();
 						numbackgroundPassed = 0;
 
@@ -583,7 +583,7 @@ int levelEnd(ALLEGRO_BITMAP* bck)
 					else if (state.y >= 225 && state.y <= 325) {
 						inLevelEnd = false;
 						fade(bck, 0, true, 39);
-						fade(levelBackground[level], 39, false, 117);
+						fade(levelBackground[level], 0, false, 117);
 						numbackgroundPassed = 0;
 
 						return 0;
@@ -599,7 +599,7 @@ int levelEnd(ALLEGRO_BITMAP* bck)
 						++level;
 						changeLevel();
 						fade(bck, 0, true, 39);
-						fade(menubck, 39, false, 117);
+						fade(menubck, 0, false, 117);
 						numbackgroundPassed = 0;
 						return 0;
 					}
@@ -629,7 +629,7 @@ int pause()
 {
 
 	fade(levelBackground[level], 0, true, 39, true);
-	fade(pausebck, 39, false, 117);
+	fade(pausebck, 0, false, 117);
 
 	bool paused = true;
 
@@ -659,13 +659,13 @@ int pause()
 					if (state.y >= 125 && state.y <= 225) {
 						paused = false;
 						fade(pausebck, 0, true, 39);
-						fade(levelBackground[level], 39, false, 117);
+						fade(levelBackground[level], 0, false, 117);
 						return 0;
 					}
 					else if (state.y >= 225 && state.y <= 325) {
 						paused = false;
 						fade(pausebck, 0, true, 39);
-						fade(levelBackground[level], 39, false, 117);
+						fade(levelBackground[level], 0, false, 117);
 						numbackgroundPassed = 0;
 						mouseDir = 'f';
 						levelProgress = 300;
@@ -686,7 +686,7 @@ int pause()
 						inGame = false;
 						paused = false;
 						fade(pausebck, 0, true, 39);
-						fade(menubck, 39, false, 117);
+						fade(menubck, 0, false, 117);
 						return 0;
 					}
 				}
@@ -900,7 +900,7 @@ int play()
 {
 	fade(menubck, 0, true, 39);
 	al_stop_sample_instance(backgroundMusicInstance);
-	if (level == 0) {
+	if (level == 10) { //>>>>
 
 		if (!endProcess) fade(houseentryway, 117, false, 117);
 		if (!optionsx && !endProcess) al_play_sample_instance(horrorSceneInstance);
@@ -985,36 +985,10 @@ int play()
 		// Intalize timeout
 		al_init_timeout(&timeout, 0.06);
 
-		string s = to_string(levelProgress); const char* chr = s.c_str(); al_set_window_title(display, chr);
+		string s = to_string(levelProgress); const char* chr = s.c_str(); al_set_window_title(display, chr); //>>>
 		// middle ladders
 
 			// bottom
-		/*
-		if (mouseY == 531) {
-			if (abs(levelProgress) >= 20 && abs(levelProgress) <= 70 && mouseDir == 'f' && levelProgress < 0) {
-				key_up_allowed = true;
-			}
-			else if (abs(levelProgress) >= 80 && abs(levelProgress) <= 140 && mouseDir == 'b' && levelProgress > 0) {
-				key_up_allowed = true;
-			}
-
-			// right ladders
-			if (abs(levelProgress) >= 1080 && levelProgress % 1080 + 1080 >= 1010 && levelProgress % 1080 + 1080 <= 1080 && mouseDir == 'f' && levelProgress > 0 || levelProgress % 1080 >= 1010 && levelProgress % 1080 <= 1080 && mouseDir == 'f' && levelProgress > 0) {
-				key_up_allowed = true;
-			}
-			else if (abs(levelProgress) >= 1080 && levelProgress % 1080 + 1080 >= 1150 && levelProgress % 1080 + 1080 <= 1220 && mouseDir == 'b' && levelProgress > 0 || levelProgress % 1080 >= 1150 && levelProgress % 1080 <= 1220 && mouseDir == 'b' && levelProgress > 0) {
-				key_up_allowed = true;
-			}
-
-			// left ladders
-			if (abs(levelProgress) >= 1080 && abs(levelProgress) % 1080 + 1080 >= 1080 && abs(levelProgress) % 1080 + 1080 <= 1160 && mouseDir == 'f' && levelProgress < 0 || abs(levelProgress) % 1080 >= 1080 && abs(levelProgress) % 1080 <= 1160 && mouseDir == 'f' && levelProgress < 0) {
-				key_up_allowed = true;
-			}
-			else if (abs(levelProgress) >= 1080 && abs(levelProgress) % 1080 + 1080 >= 940 && abs(levelProgress) % 1080 + 1080 <= 1020 && mouseDir == 'b' && levelProgress < 0 || abs(levelProgress) % 1080 >= 940 && abs(levelProgress) % 1080 <= 1020 && mouseDir == 'b' && levelProgress < 0) {
-				key_up_allowed = true;
-			}
-		}
-		*/
 
 		if (level == 0) {
 			for (int i = 0; i < (sizeof(levelOneMapHor) / sizeof(levelOneMapHor[0])); ++i) {
@@ -1041,9 +1015,87 @@ int play()
 					}
 				}
 				else {
-					key_up_allowed = true;
+					key_up_allowed = false;
 					key_down_allowed = true;
 				}
+			}
+			if (mouseY == 531) {
+				// middle
+				if (abs(levelProgress) >= 20 && abs(levelProgress) <= 70 && mouseDir == 'f' && levelProgress < 0) {
+					key_up_allowed = true;
+				}
+				else if (levelProgress >= 80 && levelProgress <= 140 && mouseDir == 'b') {
+					key_up_allowed = true;
+				}
+
+				// right ladders
+				if (levelProgress % 1080 >= 1010 && levelProgress % 1080 <= 1079 && mouseDir == 'f' && levelProgress > 0) {
+					key_up_allowed = true;
+				}
+				else if (levelProgress % 1080 >= 80 && levelProgress % 1080 <= 140 && mouseDir == 'b' && levelProgress > 0) {
+					key_up_allowed = true;
+				}
+
+				// left ladders
+				if (abs(levelProgress) % 1080 >= 0 && abs(levelProgress) % 1080 <= 80 && mouseDir == 'f' && levelProgress < 0) {
+					key_up_allowed = true;
+				}
+				else if (abs(levelProgress) % 1080 >= 940 && abs(levelProgress) % 1080 <= 1020 && mouseDir == 'b' && levelProgress < 0) {
+					key_up_allowed = true;
+				}
+			}
+			else if (mouseY == 371) {
+				// middle
+				if (levelProgress >= 320 && levelProgress <= 400 && mouseDir == 'f') {
+					key_up_allowed = true;
+				}
+				else if (levelProgress >= 480 && levelProgress <= 540 && mouseDir == 'b') {
+					key_up_allowed = true;
+				}
+
+				// right ladders
+				else if (levelProgress % 1080 >= 330 && levelProgress % 1080 <= 400 && levelProgress > 0 && mouseDir == 'f') {
+					key_up_allowed = true;
+				}
+				else if (levelProgress % 1080 >= 460 && levelProgress % 1080 <= 540 && levelProgress > 0 && mouseDir == 'b') {
+					key_up_allowed = true;
+				}
+
+				// left ladders
+				else if (abs(levelProgress) % 1080 >= 680 && abs(levelProgress) % 1080 <= 750 && levelProgress < 0 && mouseDir == 'f') {
+					key_up_allowed = true;
+				}
+				else if (abs(levelProgress) % 1080 >= 530 && abs(levelProgress) % 1080 <= 610 && levelProgress < 0 && mouseDir == 'b') {
+					key_up_allowed = true;
+				}
+			}
+			else if (mouseY == 211) {
+				// middle
+				if (levelProgress >= 690 && levelProgress <= 760 && mouseDir == 'f') {
+					key_up_allowed = true;
+				}
+				else if (levelProgress >= 840 && levelProgress <= 910 && mouseDir == 'b') {
+					key_up_allowed = true;
+				}
+
+				// right ladders
+				else if (levelProgress % 1080 >= 690 && levelProgress % 1080 <= 760 && levelProgress > 0 && mouseDir == 'f') {
+					key_up_allowed = true;
+				}
+				else if (levelProgress % 1080 >= 840 && levelProgress % 1080 <= 910 && levelProgress > 0 && mouseDir == 'b') {
+					key_up_allowed = true;
+				}
+
+				// left ladders
+				else if (abs(levelProgress) % 1080 >= 320 && abs(levelProgress) % 1080 <= 390 && levelProgress < 0 && mouseDir == 'f') {
+					key_up_allowed = true;
+				}
+				else if (abs(levelProgress) % 1080 >= 180 && abs(levelProgress) % 1080 <= 240 && levelProgress < 0 && mouseDir == 'b') {
+					key_up_allowed = true;
+				}
+			}
+			else {
+				key_up_allowed = false;
 			}
 
 		}
@@ -1278,7 +1330,7 @@ int menu()
 {
 	al_install_mouse();
 	al_install_keyboard();
-	fade(menubck, 39, false, 117);
+	fade(menubck, 0, false, 117);
 	while (!endProcess) {
 
 		bool mouse_button_1 = false;
@@ -1444,7 +1496,7 @@ int main(int argc, char* argv[])
 	// Clear screen to black
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
-
+	menu(); //>>>
 	// Hound Productions
 	if (!endProcess) fade(houndproductions, 78, false, 156);
 	if (!endProcess) fade(houndproductions, 234, true, 312);
