@@ -85,6 +85,18 @@ int levelTwoMapVer[] = {
 	51, 211, 371, 531
 };
 
+int levelTwoMapHorHor[] = {
+	0
+};
+
+int levelTwoMapVerHor[] = {
+	0
+};
+
+int levelTwoMapHorHorWidth[] = {
+	0
+};
+
 // Level Three Map
 int levelThreeMapHor[] = {
 	0 - 300, -300, -300, -300
@@ -733,7 +745,15 @@ int redrawGame() {
 			al_draw_filled_rectangle((levelOneMapHorHor[x] - levelProgress) + mouseX + 300, levelOneMapVerHor[x], (levelOneMapHorHor[x] - levelProgress) + (mouseX + 300 + levelOneMapHorHorWidth[x]), levelOneMapVerHor[x] + 10, al_map_rgb(156, 42, 42));
 		}
 	}
-	if (level == 2) {
+	else if (level == 1) {
+		for (int x = 0; x < sizeof(levelTwoMapHor) / sizeof(levelTwoMapHor[0]); ++x) {
+			al_draw_filled_rectangle((levelTwoMapHor[x] - levelProgress) + mouseX + 300, levelTwoMapVer[x], (levelTwoMapHor[x] - levelProgress) + (mouseX + 310), levelTwoMapVer[x] + 61, al_map_rgb(156, 42, 42));
+		}
+		for (int x = 0; x < sizeof(levelTwoMapHorHor) / sizeof(levelTwoMapHorHor[0]); ++x) {
+			al_draw_filled_rectangle((levelTwoMapHorHor[x] - levelProgress) + mouseX + 300, levelTwoMapVerHor[x], (levelTwoMapHorHor[x] - levelProgress) + (mouseX + 300 + levelTwoMapHorHorWidth[x]), levelTwoMapVerHor[x] + 10, al_map_rgb(156, 42, 42));
+		}
+	}
+	else if (level == 2) {
 		for (int x = 0; x < sizeof(levelThreeMapHor) / sizeof(levelThreeMapHor[0]); ++x) {
 			al_draw_filled_rectangle((levelThreeMapHor[x] - levelProgress) + mouseX + 300, levelThreeMapVer[x], (levelThreeMapHor[x] - levelProgress) + (mouseX + 310), levelThreeMapVer[x] + 61, al_map_rgb(156, 42, 42));
 		}
@@ -880,7 +900,7 @@ int play()
 {
 	fade(menubck, 0, true, 39);
 	al_stop_sample_instance(backgroundMusicInstance);
-	if (level == 10) {
+	if (level == 0) {
 
 		if (!endProcess) fade(houseentryway, 117, false, 117);
 		if (!optionsx && !endProcess) al_play_sample_instance(horrorSceneInstance);
@@ -969,6 +989,7 @@ int play()
 		// middle ladders
 
 			// bottom
+		/*
 		if (mouseY == 531) {
 			if (abs(levelProgress) >= 20 && abs(levelProgress) <= 70 && mouseDir == 'f' && levelProgress < 0) {
 				key_up_allowed = true;
@@ -993,6 +1014,7 @@ int play()
 				key_up_allowed = true;
 			}
 		}
+		*/
 
 		if (level == 0) {
 			for (int i = 0; i < (sizeof(levelOneMapHor) / sizeof(levelOneMapHor[0])); ++i) {
@@ -1010,7 +1032,7 @@ int play()
 				}
 			}
 			for (int i = 0; i < (sizeof(levelOneMapHorHor) / sizeof(levelOneMapHorHor[0])); ++i) {
-				if (levelProgress > levelOneMapHorHor[i] && levelProgress < levelOneMapHorHor[i] + 600) {
+				if (levelProgress > levelOneMapHorHor[i] && levelProgress < levelOneMapHorHor[i] + 300 + levelOneMapHorHorWidth[i]) {
 					if (levelOneMapVerHor[i] == mouseY - 10) {
 						key_up_allowed = false;
 					}
@@ -1019,7 +1041,7 @@ int play()
 					}
 				}
 				else {
-					key_up_allowed = false;
+					key_up_allowed = true;
 					key_down_allowed = true;
 				}
 			}
@@ -1041,6 +1063,20 @@ int play()
 					key_left = true;
 				}
 			}
+			for (int i = 0; i < (sizeof(levelTwoMapHorHor) / sizeof(levelTwoMapHorHor[0])); ++i) {
+				if (levelProgress > levelTwoMapHorHor[i] && levelProgress < levelTwoMapHorHor[i] + 300 + levelTwoMapHorHorWidth[i]) {
+					if (levelTwoMapVerHor[i] == mouseY - 10) {
+						key_up_allowed = false;
+					}
+					else if (levelTwoMapVerHor[i] == mouseY + 61) {
+						key_down_allowed = false;
+					}
+				}
+				else {
+					key_up_allowed = false;
+					key_down_allowed = true;
+				}
+			}
 		}
 
 		else if (level == 2) {
@@ -1056,6 +1092,20 @@ int play()
 				else {
 					key_right = true;
 					key_left = true;
+				}
+			}
+			for (int i = 0; i < (sizeof(levelThreeMapHorHor) / sizeof(levelThreeMapHorHor[0])); ++i) {
+				if (levelProgress > levelThreeMapHorHor[i] && levelProgress < levelThreeMapHorHor[i] + 300 + levelThreeMapHorHorWidth[i]) {
+					if (levelThreeMapVerHor[i] == mouseY - 10) {
+						key_up_allowed = false;
+					}
+					else if (levelThreeMapVerHor[i] == mouseY + 61) {
+						key_down_allowed = false;
+					}
+				}
+				else {
+					key_up_allowed = false;
+					key_down_allowed = true;
 				}
 			}
 		}
@@ -1394,7 +1444,7 @@ int main(int argc, char* argv[])
 	// Clear screen to black
 	al_clear_to_color(al_map_rgb(0, 0, 0));
 	al_flip_display();
-	menu();
+
 	// Hound Productions
 	if (!endProcess) fade(houndproductions, 78, false, 156);
 	if (!endProcess) fade(houndproductions, 234, true, 312);
