@@ -52,13 +52,16 @@ ALLEGRO_SAMPLE* gameMusic = NULL;
 ALLEGRO_EVENT_QUEUE* event_queue = NULL;
 ALLEGRO_TIMER* timer = NULL;
 
+// Change as The Number of Available Skins Goes Up
+int numSkins = 2;
+
 // Level One Map
 int levelOneMapHor[] = {
-	0
+	4020, 4020, 4020
 };
 
 int levelOneMapVer[] = {
-	0
+	211, 371, 531
 };
 
 int levelOneMapHorHor[] = {
@@ -77,7 +80,7 @@ int levelOneMapHorHorWidth[] = {
 
 int levelTwoMapHor[] = {
 	1080, 1080, 1080, 1080,
-	0, 0, 0, 0
+	-10, -10, -10, -10
 };
 
 int levelTwoMapVer[] = {
@@ -119,9 +122,10 @@ int levelThreeMapHorHorWidth[] = {
 };
 
 int level = 0;
+int skin = 1;
 int numSamples = 1;
 int mouseFrames = 0;
-int levelProgress = 300;
+int levelProgress = 600;
 int numbackgroundPassed = 0;
 bool mouse1 = false;
 float mouseX = -550;
@@ -153,7 +157,7 @@ int redrawFade(ALLEGRO_BITMAP* image, float fadeTransparency)
 	return 0;
 }
 
-int fade(ALLEGRO_BITMAP* image, int framesUpTo312, bool trueForOutFalseForIn, int totalLength, bool levelFade = false)
+int fade(ALLEGRO_BITMAP* image, int framesUpTo312, bool trueForOutFalseForIn, int totalLength, bool levelFade = false, bool optionsFade = false)
 {
 	int frames = 0;
 	float fadeTransparency = 0.0f;
@@ -176,7 +180,13 @@ int fade(ALLEGRO_BITMAP* image, int framesUpTo312, bool trueForOutFalseForIn, in
 				return 0;
 				break;
 			case ALLEGRO_EVENT_TIMER:
-				if (levelFade) {
+				if (optionsFade) {
+					al_draw_bitmap(image, 0, 0, 0);
+					al_draw_bitmap(smallmouse, 390, 411, 0);
+					al_draw_filled_rectangle(0, 0, 1080, 640, al_map_rgba_f(0, 0, 0, fadeTransparency));
+					al_flip_display();
+				}
+				else if (levelFade) {
 					al_draw_bitmap(levelBackground[level], backgroundX, 0, 0);
 					if (backgroundX <= -1 && level != 1) {
 						al_draw_bitmap(levelBackground[level], backgroundX + 1080, 0, 0);
@@ -286,7 +296,54 @@ int check_for_restart_gamemusic()
 	return 0;
 }
 
-bool checkLevel()
+int checkSkin()
+{
+	fstream openfile(user + "\\skin.txt", fstream::in);
+	int text;
+	openfile >> text;
+	openfile.close();
+	skin = text;
+	return 0;
+}
+
+int changeSkin(bool trueForPostFalseForPre)
+{
+	fstream file(user + "\\skin.txt", fstream::out);
+	if (trueForPostFalseForPre == true) {
+		if (skin + 1 > numSkins) {
+			skin = 1;
+		}
+		else {
+			skin += 1;
+		}
+	}
+	else {
+		if (skin - 1 < 1) {
+			skin = numSkins;
+		}
+		else {
+			skin -= 1;
+		}
+	}
+
+	file << skin;
+
+	file.close();
+
+	char fileName[25];
+	sprintf_s(fileName, "smallmouse%d.png", skin);
+	smallmouse = al_load_bitmap(fileName);
+	sprintf_s(fileName, "smallmouse1%d.png", skin);
+	smallmouse1 = al_load_bitmap(fileName);
+	sprintf_s(fileName, "backsmallmouse%d.png", skin);
+	backsmallmouse = al_load_bitmap(fileName);
+	sprintf_s(fileName, "backsmallmouse1%d.png", skin);
+	backsmallmouse1 = al_load_bitmap(fileName);
+
+	return 0;
+}
+
+int checkLevel()
 {
 	fstream openfile(user + "\\level.txt", fstream::in);
 	int text;
@@ -305,7 +362,7 @@ int changeLevel()
 	return 0;
 }
 
-bool checkSound()
+int checkSound()
 {
 	fstream openfile(user + "\\sound.txt", fstream::in);
 	char text;
@@ -322,7 +379,7 @@ bool checkSound()
 	return 0;
 }
 
-bool checkUser()
+int checkUser()
 {
 	for (int x = 0; userVal[x] != NULL; ++x) {
 		user += userVal[x];
@@ -421,6 +478,7 @@ int drawOptions()
 	else {
 		al_draw_bitmap(optionsxbck, 0, 0, 0);
 	}
+	al_draw_bitmap(smallmouse, 390, 411, 0);
 	if (waitingFoot == false) {
 		al_draw_bitmap(foot, 0, footY, 0);
 		if (footY > 507) {
@@ -438,10 +496,10 @@ int options()
 	bool mouse_button_1 = false;
 
 	if (!optionsx) {
-		fade(optionsybck, 0, false, 39);
+		fade(optionsybck, 0, false, 39, false, true);
 	}
 	else {
-		fade(optionsxbck, 0, false, 39);
+		fade(optionsxbck, 0, false, 39, false, true);
 	}
 
 	while (inOptions) {
@@ -469,13 +527,19 @@ int options()
 				if (state.x >= 90 && state.x <= 990 && state.y >= 256 && state.y <= 346) {
 					changeSound();
 				}
+				else if (state.y >= 411 && state.y <= 472 && state.x >= 289 && state.x <= 350) {
+					changeSkin(false);
+				}
+				else if (state.y >= 411 && state.y <= 472 && state.x >= 730 && state.x <= 791) {
+						changeSkin(true);
+				}
 				else {
 					inOptions = false;
 					if (!optionsx) {
-						fade(optionsybck, 0, true, 39);
+						fade(optionsybck, 0, true, 39, false, true);
 					}
 					else {
-						fade(optionsxbck, 0, true, 39);
+						fade(optionsxbck, 0, true, 39, false, true);
 					}
 					return 0;
 				}
@@ -541,7 +605,7 @@ int levelEnd(ALLEGRO_BITMAP* bck)
 
 	bool mouse_button_1 = false;
 
-	levelProgress = 300;
+	levelProgress = 600;
 	backgroundX = 0;
 	mouseFrames = 0;
 	mouse1 = false;
@@ -668,7 +732,7 @@ int pause()
 						fade(levelBackground[level], 0, false, 117);
 						numbackgroundPassed = 0;
 						mouseDir = 'f';
-						levelProgress = 300;
+						levelProgress = 600;
 						backgroundX = 0;
 						mouseFrames = 0;
 						mouse1 = false;
@@ -939,7 +1003,7 @@ int play()
 
 	mouseDir = 'f';
 
-	levelProgress = 300;
+	levelProgress = 600;
 	backgroundX = 0;
 	mouseFrames = 0;
 	mouse1 = false;
@@ -988,6 +1052,8 @@ int play()
 		al_init_timeout(&timeout, 0.06);
 
 		if (level == 0) {
+
+			// ladders
 			if (mouseY == 531 && (
 				abs(levelProgress) >= 20 && abs(levelProgress) <= 70 && mouseDir == 'f' && levelProgress < 0 ||
 				levelProgress >= 80 && levelProgress <= 140 && mouseDir == 'b' ||
@@ -1018,6 +1084,7 @@ int play()
 			else {
 				key_up_allowed = false;
 			}
+
 			for (int i = 0; i < (sizeof(levelOneMapHor) / sizeof(levelOneMapHor[0])); ++i) {
 				if (mouseDir == 'f' && levelProgress == levelOneMapHor[i] && targetMouseY == levelOneMapVer[i]) {
 					key_right = false;
@@ -1072,7 +1139,7 @@ int play()
 					}
 				}
 				else {
-					key_up_allowed = false;
+					key_up_allowed = true;
 					key_down_allowed = true;
 				}
 			}
@@ -1368,6 +1435,7 @@ int main(int argc, char* argv[])
 	appdataErr = _dupenv_s(&userVal, &len, "APPDATA");
 	if (appdataErr) return -1;
 	checkUser();
+	checkSkin();
 	free(userVal);
 
 	checkSound();
@@ -1429,10 +1497,18 @@ int main(int argc, char* argv[])
 	optionsybck = al_load_bitmap("optionsybck.png");
 	optionsxbck = al_load_bitmap("optionsxbck.png");
 	mouse = al_load_bitmap("mouse.png");
-	smallmouse = al_load_bitmap("smallmouse.png");
-	smallmouse1 = al_load_bitmap("smallmouse1.png");
-	backsmallmouse = al_load_bitmap("backsmallmouse.png");
-	backsmallmouse1 = al_load_bitmap("backsmallmouse1.png");
+
+	// load skins
+	char fileName[25];
+	sprintf_s(fileName, "smallmouse%d.png", skin);
+	smallmouse = al_load_bitmap(fileName);
+	sprintf_s(fileName, "smallmouse1%d.png", skin);
+	smallmouse1 = al_load_bitmap(fileName);
+	sprintf_s(fileName, "backsmallmouse%d.png", skin);
+	backsmallmouse = al_load_bitmap(fileName);
+	sprintf_s(fileName, "backsmallmouse1%d.png", skin);
+	backsmallmouse1 = al_load_bitmap(fileName);
+
 	upmouse = al_load_bitmap("upmouse.png");
 	bckground = al_load_bitmap("bckground.jpeg");
 	menubck = al_load_bitmap("menubck.png");
