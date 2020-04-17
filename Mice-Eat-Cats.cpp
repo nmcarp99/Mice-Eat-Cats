@@ -79,8 +79,8 @@ int levelOneMapHorHorWidth[] = {
 // Level Two Map
 
 int levelTwoMapHor[] = {
-	1080, 1080, 1080, 1080,
-	-10, -10, -10, -10
+	780, 780, 780, 780,
+	-310, -310, -310, -310
 };
 
 int levelTwoMapVer[] = {
@@ -125,7 +125,7 @@ int level = 0;
 int skin = 1;
 int numSamples = 1;
 int mouseFrames = 0;
-int levelProgress = 600;
+int levelProgress = 300;
 int numbackgroundPassed = 0;
 bool mouse1 = false;
 float mouseX = -550;
@@ -605,7 +605,7 @@ int levelEnd(ALLEGRO_BITMAP* bck)
 
 	bool mouse_button_1 = false;
 
-	levelProgress = 600;
+	levelProgress = 300;
 	backgroundX = 0;
 	mouseFrames = 0;
 	mouse1 = false;
@@ -732,7 +732,7 @@ int pause()
 						fade(levelBackground[level], 0, false, 117);
 						numbackgroundPassed = 0;
 						mouseDir = 'f';
-						levelProgress = 600;
+						levelProgress = 300;
 						backgroundX = 0;
 						mouseFrames = 0;
 						mouse1 = false;
@@ -1003,7 +1003,7 @@ int play()
 
 	mouseDir = 'f';
 
-	levelProgress = 600;
+	levelProgress = 300;
 	backgroundX = 0;
 	mouseFrames = 0;
 	mouse1 = false;
