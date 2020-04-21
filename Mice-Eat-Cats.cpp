@@ -53,11 +53,11 @@ ALLEGRO_EVENT_QUEUE* event_queue = NULL;
 ALLEGRO_TIMER* timer = NULL;
 
 // Change as The Number of Available Skins Goes Up
-int numSkins = 2;
+int numSkins = 3;
 
 // Level One Map
 int levelOneMapHor[] = {
-	4020, 4020, 4020
+	4320, 4320, 4320
 };
 
 int levelOneMapVer[] = {
@@ -79,8 +79,8 @@ int levelOneMapHorHorWidth[] = {
 // Level Two Map
 
 int levelTwoMapHor[] = {
-	780, 780, 780, 780,
-	-310, -310, -310, -310
+	1080, 1080, 1080, 1080
+	-10, -10, -10, -10
 };
 
 int levelTwoMapVer[] = {
@@ -125,7 +125,7 @@ int level = 0;
 int skin = 1;
 int numSamples = 1;
 int mouseFrames = 0;
-int levelProgress = 300;
+int levelProgress = 600;
 int numbackgroundPassed = 0;
 bool mouse1 = false;
 float mouseX = -550;
@@ -298,7 +298,7 @@ int check_for_restart_gamemusic()
 
 int checkSkin()
 {
-	fstream openfile(user + "\\skin.txt", fstream::in);
+	fstream openfile(user + "\\I Topi Mangiano Gatti\\skin.txt", fstream::in);
 	int text;
 	openfile >> text;
 	openfile.close();
@@ -308,7 +308,7 @@ int checkSkin()
 
 int changeSkin(bool trueForPostFalseForPre)
 {
-	fstream file(user + "\\skin.txt", fstream::out);
+	fstream file(user + "\\I Topi Mangiano Gatti\\skin.txt", fstream::out);
 	if (trueForPostFalseForPre == true) {
 		if (skin + 1 > numSkins) {
 			skin = 1;
@@ -345,7 +345,7 @@ int changeSkin(bool trueForPostFalseForPre)
 
 int checkLevel()
 {
-	fstream openfile(user + "\\level.txt", fstream::in);
+	fstream openfile(user + "\\I Topi Mangiano Gatti\\level.txt", fstream::in);
 	int text;
 	openfile >> text;
 	openfile.close();
@@ -355,7 +355,7 @@ int checkLevel()
 
 int changeLevel()
 {
-	fstream file(user + "\\level.txt", fstream::out);
+	fstream file(user + "\\I Topi Mangiano Gatti\\level.txt", fstream::out);
 	file << level;
 	file.close();
 
@@ -364,7 +364,7 @@ int changeLevel()
 
 int checkSound()
 {
-	fstream openfile(user + "\\sound.txt", fstream::in);
+	fstream openfile(user + "\\I Topi Mangiano Gatti\\sound.txt", fstream::in);
 	char text;
 	openfile >> text;
 	openfile.close();
@@ -389,11 +389,11 @@ int checkUser()
 
 int changeSound()
 {
-	fstream openfile(user + "\\sound.txt", fstream::in);
+	fstream openfile(user + "\\I Topi Mangiano Gatti\\sound.txt", fstream::in);
 	char text;
 	openfile >> text;
 	openfile.close();
-	fstream file(user + "\\sound.txt", fstream::out);
+	fstream file(user + "\\I Topi Mangiano Gatti\\sound.txt", fstream::out);
 	if (text == '0') {
 		file << "1";
 		optionsx = false;
@@ -605,7 +605,7 @@ int levelEnd(ALLEGRO_BITMAP* bck)
 
 	bool mouse_button_1 = false;
 
-	levelProgress = 300;
+	levelProgress = 600;
 	backgroundX = 0;
 	mouseFrames = 0;
 	mouse1 = false;
@@ -732,7 +732,7 @@ int pause()
 						fade(levelBackground[level], 0, false, 117);
 						numbackgroundPassed = 0;
 						mouseDir = 'f';
-						levelProgress = 300;
+						levelProgress = 600;
 						backgroundX = 0;
 						mouseFrames = 0;
 						mouse1 = false;
@@ -1003,7 +1003,7 @@ int play()
 
 	mouseDir = 'f';
 
-	levelProgress = 300;
+	levelProgress = 600;
 	backgroundX = 0;
 	mouseFrames = 0;
 	mouse1 = false;
@@ -1055,30 +1055,30 @@ int play()
 
 			// ladders
 			if (mouseY == 531 && (
-				abs(levelProgress) >= 20 && abs(levelProgress) <= 70 && mouseDir == 'f' && levelProgress < 0 ||
-				levelProgress >= 80 && levelProgress <= 140 && mouseDir == 'b' ||
-				levelProgress % 1080 >= 1010 && levelProgress % 1080 <= 1079 && mouseDir == 'f' && levelProgress > 0 ||
-				levelProgress % 1080 >= 80 && levelProgress % 1080 <= 140 && mouseDir == 'b' && levelProgress > 0 ||
-				abs(levelProgress) % 1080 >= 0 && abs(levelProgress) % 1080 <= 80 && mouseDir == 'f' && levelProgress < 0 ||
-				abs(levelProgress) % 1080 >= 940 && abs(levelProgress) % 1080 <= 1020 && mouseDir == 'b' && levelProgress < 0)) {
+				abs((levelProgress - 300)) >= 20 && abs((levelProgress - 300)) <= 70 && mouseDir == 'f' && (levelProgress - 300) < 0 ||
+				(levelProgress - 300) >= 80 && (levelProgress - 300) <= 140 && mouseDir == 'b' ||
+				(levelProgress - 300) % 1080 >= 1010 && (levelProgress - 300) % 1080 <= 1079 && mouseDir == 'f' && (levelProgress - 300) > 0 ||
+				(levelProgress - 300) % 1080 >= 80 && (levelProgress - 300) % 1080 <= 140 && mouseDir == 'b' && (levelProgress - 300) > 0 ||
+				abs((levelProgress - 300)) % 1080 >= 0 && abs((levelProgress - 300)) % 1080 <= 80 && mouseDir == 'f' && (levelProgress - 300) < 0 ||
+				abs((levelProgress - 300)) % 1080 >= 940 && abs((levelProgress - 300)) % 1080 <= 1020 && mouseDir == 'b' && (levelProgress - 300) < 0)) {
 				key_up_allowed = true;
 			}
 			else if (mouseY == 371 && (
-				levelProgress >= 320 && levelProgress <= 400 && mouseDir == 'f' ||
-				levelProgress >= 480 && levelProgress <= 540 && mouseDir == 'b' ||
-				levelProgress % 1080 >= 330 && levelProgress % 1080 <= 400 && levelProgress > 0 && mouseDir == 'f' ||
-				levelProgress % 1080 >= 460 && levelProgress % 1080 <= 540 && levelProgress > 0 && mouseDir == 'b' ||
-				abs(levelProgress) % 1080 >= 680 && abs(levelProgress) % 1080 <= 750 && levelProgress < 0 && mouseDir == 'f' ||
-				abs(levelProgress) % 1080 >= 530 && abs(levelProgress) % 1080 <= 610 && levelProgress < 0 && mouseDir == 'b')) {
+				(levelProgress - 300) >= 320 && (levelProgress - 300) <= 400 && mouseDir == 'f' ||
+				(levelProgress - 300) >= 480 && (levelProgress - 300) <= 540 && mouseDir == 'b' ||
+				(levelProgress - 300) % 1080 >= 330 && (levelProgress - 300) % 1080 <= 400 && (levelProgress - 300) > 0 && mouseDir == 'f' ||
+				(levelProgress - 300) % 1080 >= 460 && (levelProgress - 300) % 1080 <= 540 && (levelProgress - 300) > 0 && mouseDir == 'b' ||
+				abs((levelProgress - 300)) % 1080 >= 680 && abs((levelProgress - 300)) % 1080 <= 750 && (levelProgress - 300) < 0 && mouseDir == 'f' ||
+				abs((levelProgress - 300)) % 1080 >= 530 && abs((levelProgress - 300)) % 1080 <= 610 && (levelProgress - 300) < 0 && mouseDir == 'b')) {
 				key_up_allowed = true;
 			}
 			else if (mouseY == 211 && (
-				levelProgress >= 690 && levelProgress <= 760 && mouseDir == 'f' ||
-				levelProgress >= 840 && levelProgress <= 910 && mouseDir == 'b' ||
-				levelProgress % 1080 >= 690 && levelProgress % 1080 <= 760 && levelProgress > 0 && mouseDir == 'f' ||
-				levelProgress % 1080 >= 840 && levelProgress % 1080 <= 910 && levelProgress > 0 && mouseDir == 'b' ||
-				abs(levelProgress) % 1080 >= 320 && abs(levelProgress) % 1080 <= 390 && levelProgress < 0 && mouseDir == 'f' ||
-				abs(levelProgress) % 1080 >= 180 && abs(levelProgress) % 1080 <= 240 && levelProgress < 0 && mouseDir == 'b')) {
+				(levelProgress - 300) >= 690 && (levelProgress - 300) <= 760 && mouseDir == 'f' ||
+				(levelProgress - 300) >= 840 && (levelProgress - 300) <= 910 && mouseDir == 'b' ||
+				(levelProgress - 300) % 1080 >= 690 && (levelProgress - 300) % 1080 <= 760 && (levelProgress - 300) > 0 && mouseDir == 'f' ||
+				(levelProgress - 300) % 1080 >= 840 && (levelProgress - 300) % 1080 <= 910 && (levelProgress - 300) > 0 && mouseDir == 'b' ||
+				abs((levelProgress - 300)) % 1080 >= 320 && abs((levelProgress - 300)) % 1080 <= 390 && (levelProgress - 300) < 0 && mouseDir == 'f' ||
+				abs((levelProgress - 300)) % 1080 >= 180 && abs((levelProgress - 300)) % 1080 <= 240 && (levelProgress - 300) < 0 && mouseDir == 'b')) {
 				key_up_allowed = true;
 			}
 			else {
