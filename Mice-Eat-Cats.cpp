@@ -1451,6 +1451,7 @@ int main(int argc, char* argv[])
 	al_init_primitives_addon();
 	al_reserve_samples(numSamples);
 	al_init_image_addon();
+	al_set_new_display_flags(ALLEGRO_WINDOWED | ALLEGRO_RESIZABLE);
 	display = al_create_display(1080, 640);
 	al_set_window_title(display, "I Topi Mangiano Gatti");
 	event_queue = al_create_event_queue();
